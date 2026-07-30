@@ -1,0 +1,79 @@
+/* ============================================================
+   ORBIT — languages & dialects circling the assistant
+   ============================================================ */
+.orb-two{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:center}
+.orb-copy{min-width:0}
+.orb-copy .t-lead{max-width:46ch}
+.orbwrap{position:relative;display:flex;flex-direction:column;align-items:center;min-width:0}
+.orb-svg{width:100%;max-width:600px;height:auto;display:block;margin-inline:auto;overflow:visible}
+
+.orb-ring{fill:none;stroke:var(--brand);stroke-opacity:.22;stroke-width:1.2}
+.sec-dark .orb-ring{stroke:#fff;stroke-opacity:.20}
+
+.orb-pod circle.rim{fill:none;stroke:var(--bg-2);stroke-width:3}
+.sec-dark .orb-pod circle.rim{stroke:rgba(255,255,255,.9)}
+.orb-pod{filter:drop-shadow(0 3px 10px rgba(var(--shade),.22))}
+.sec-dark .orb-pod{filter:drop-shadow(0 4px 12px rgba(0,0,0,.55))}
+
+.orb-core{filter:drop-shadow(0 8px 26px rgba(0,119,238,.35))}
+.orb-glow{fill:url(#orbGlow)}
+
+.orb-chips{display:flex;flex-wrap:wrap;gap:var(--s2)}
+
+@media (max-width:900px){
+  .orb-two{grid-template-columns:1fr;gap:var(--s8)}
+  .orb-copy{text-align:center;align-items:center}
+  .orb-copy .badge{align-self:center !important}
+  .orb-copy .t-lead{margin-inline:auto}
+  .orb-chips,.orb-copy .cta-row{justify-content:center !important}
+}
+@media (max-width:600px){.orb-svg{max-width:100%}}
+@media (prefers-reduced-motion:reduce){
+  .orb-svg animateTransform{display:none}
+}
+
+/* ============ orbit reveal: sonar assembly ============
+   Keyed off the .in class the site-wide reveal observer already adds — no
+   extra JS. Core pops first, a pulse wave expands, and each ring + its
+   flags assemble as the wave passes (inner ring first). All one-shot
+   transform/opacity; after ~1s the section costs nothing extra.
+   The pop wrapper (.orb-pop) is NOT .orb-pod: SMIL owns that transform. */
+.orbwrap .orb-wave{fill:none;stroke:var(--brand);stroke-width:2;opacity:0;
+  transform-box:fill-box;transform-origin:center}
+.orbwrap.rv .orb-core,
+.orbwrap.rv .orb-ring,
+.orbwrap.rv .orb-pop{opacity:0;transform-box:fill-box;transform-origin:center}
+
+.orbwrap.rv.in .orb-core{animation:orbCoreIn .5s cubic-bezier(.34,1.56,.64,1) both}
+.orbwrap.rv.in .orb-wave{animation:orbWaveOut .95s ease-out .1s both}
+.orbwrap.rv.in .orb-ring{animation:orbRingIn .55s var(--ease) both;
+  animation-delay:calc(.18s + var(--od,0) * .17s)}
+.orbwrap.rv.in .orb-pop{animation:orbPodIn .5s cubic-bezier(.34,1.56,.64,1) both;
+  animation-delay:calc(.34s + var(--od,0) * .17s)}
+
+@keyframes orbCoreIn{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:none}}
+@keyframes orbWaveOut{0%{opacity:.5;transform:scale(.35)}100%{opacity:0;transform:scale(4.7)}}
+@keyframes orbRingIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes orbPodIn{from{opacity:0;transform:scale(0)}to{opacity:1;transform:none}}
+
+/* dialect chips cascade in after the diagram starts assembling */
+.orb-copy.rv .orb-chips .chip{opacity:0;transform:translateY(8px)}
+.orb-copy.rv.in .orb-chips .chip{animation:orbChipIn .4s var(--ease) both}
+.orb-copy.rv.in .orb-chips .chip:nth-child(1){animation-delay:.46s}
+.orb-copy.rv.in .orb-chips .chip:nth-child(2){animation-delay:.54s}
+.orb-copy.rv.in .orb-chips .chip:nth-child(3){animation-delay:.62s}
+.orb-copy.rv.in .orb-chips .chip:nth-child(4){animation-delay:.70s}
+.orb-copy.rv.in .orb-chips .chip:nth-child(5){animation-delay:.78s}
+@keyframes orbChipIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* the copy column joins the choreography: badge, title, lead, chips, CTA
+   cascade top-to-bottom while the diagram assembles beside them */
+.orb-copy.rv{opacity:1;transform:none;transition:none}
+.orb-copy.rv > *{opacity:0;transform:translateY(14px)}
+.orb-copy.rv.in > *{animation:orbTxtIn .5s var(--ease) both}
+.orb-copy.rv.in > *:nth-child(1){animation-delay:.05s}
+.orb-copy.rv.in > *:nth-child(2){animation-delay:.16s}
+.orb-copy.rv.in > *:nth-child(3){animation-delay:.27s}
+.orb-copy.rv.in > *:nth-child(4){animation-delay:.38s}
+.orb-copy.rv.in > *:nth-child(5){animation-delay:.72s}
+@keyframes orbTxtIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}

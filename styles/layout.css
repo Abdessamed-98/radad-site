@@ -1,0 +1,235 @@
+/* ============ ROI calculator ============ */
+.calc{display:grid;grid-template-columns:1fr 1.05fr;gap:0;overflow:hidden}
+.calc-in{padding:clamp(1.4rem,3vw,2.2rem);display:flex;flex-direction:column;gap:var(--s6)}
+.calc-f{display:flex;flex-direction:column;gap:var(--s3)}
+.calc-lab{display:flex;align-items:baseline;gap:var(--s2)}
+.calc-lab>span:first-child{font-size:.86rem;font-weight:600}
+.calc-val{margin-inline-start:auto;font-family:var(--disp);font-size:1.05rem;font-weight:700;
+  color:var(--brand);font-variant-numeric:tabular-nums}
+.rng{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:var(--rf);
+  background:var(--surf-3);box-shadow:inset 0 1px 2px rgba(var(--shade),.10);outline:none;cursor:pointer}
+.rng::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;
+  border-radius:50%;background:var(--surf-btn);cursor:pointer;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4), 0 0 0 3px var(--bg), var(--e-brand);
+  transition:transform var(--dur) var(--ease)}
+.rng::-webkit-slider-thumb:hover{transform:scale(1.12)}
+.rng::-moz-range-thumb{width:22px;height:22px;border:0;border-radius:50%;background:var(--brand);
+  cursor:pointer;box-shadow:0 0 0 3px var(--bg), var(--e-brand)}
+.rng:focus-visible{box-shadow:inset 0 1px 2px rgba(var(--shade),.10), var(--focus)}
+.calc-hint{font-size:.74rem;color:var(--ink-3)}
+.calc-out{background:var(--surf-brand);color:#fff;padding:clamp(1.4rem,3vw,2.2rem);
+  display:flex;flex-direction:column;gap:var(--s5);position:relative;overflow:hidden;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+.calc-out::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(80% 70% at 50% 0%,rgba(255,255,255,.22),transparent 62%)}
+.calc-out>*{position:relative;z-index:1}
+.calc-hero{display:flex;flex-direction:column;gap:var(--s1)}
+.calc-hero-k{font-size:.82rem;color:rgba(255,255,255,.8)}
+.calc-hero-v{font-family:var(--disp);font-size:clamp(2rem,4.4vw,3rem);font-weight:700;
+  line-height:1.05;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.calc-hero-v small{font-size:.4em;font-weight:600;opacity:.75;margin-inline-start:.35em;letter-spacing:0}
+.calc-mini{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.calc-m{background:rgba(255,255,255,.13);border-radius:var(--r2);padding:var(--s4);
+  display:flex;flex-direction:column;gap:2px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
+.calc-m-k{font-size:.72rem;color:rgba(255,255,255,.78);line-height:1.5}
+.calc-m-v{font-family:var(--disp);font-size:1.25rem;font-weight:700;font-variant-numeric:tabular-nums}
+.calc-split{height:10px;border-radius:var(--rf);background:rgba(255,255,255,.22);overflow:hidden;display:flex}
+.calc-split i{display:block;height:100%;background:#fff;transition:width .5s var(--ease)}
+.calc-legend{display:flex;gap:var(--s4);flex-wrap:wrap;font-size:.74rem;color:rgba(255,255,255,.82)}
+.calc-legend span{display:flex;align-items:center;gap:6px}
+.calc-legend i{width:8px;height:8px;border-radius:50%;background:#fff;flex:none}
+.calc-legend .dim i{background:rgba(255,255,255,.38)}
+.calc-note{font-size:.72rem;color:rgba(255,255,255,.68);line-height:1.6}
+
+/* ============ dialect demo ============ */
+.dw{display:grid;grid-template-columns:1.18fr .82fr;gap:var(--s4);align-items:stretch}
+.dbox{padding:clamp(1.2rem,2.6vw,1.8rem);display:flex;flex-direction:column;gap:var(--s4)}
+.dtabs{display:flex;gap:6px;flex-wrap:wrap}
+.dt{padding:.45rem .95rem;border-radius:var(--rf);font-size:.83rem;font-weight:600;
+  color:var(--ink-2);background:var(--surf-2);box-shadow:var(--ring);
+  transition:all var(--dur) var(--ease)}
+.dt:hover{color:var(--ink)}
+.dt.on{background:var(--surf-btn);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.3), var(--e-brand)}
+.dqs{display:flex;flex-wrap:wrap;gap:6px}
+.dq{padding:.42rem .8rem;border-radius:var(--r2);font-size:.79rem;color:var(--ink-2);
+  background:var(--surf-1);box-shadow:var(--ring), var(--hi);text-align:start;
+  transition:all var(--dur) var(--ease)}
+.dq:hover{color:var(--brand-d);background:var(--brand-tint);
+  box-shadow:0 0 0 1px var(--brand-tint-2);transform:translateY(-2px)}
+.dchat{background:var(--surf-2);border-radius:var(--r3);padding:var(--s4);min-height:190px;
+  display:flex;flex-direction:column;gap:var(--s3);justify-content:center;
+  box-shadow:var(--ring), inset 0 1px 2px rgba(var(--shade),.04)}
+.dchat .msg{max-width:88%}
+.dempty{font-size:.85rem;color:var(--ink-3);text-align:center;line-height:1.7}
+.dform{display:flex;gap:var(--s2)}
+.dform .input{border-radius:var(--rf);padding-inline:1.05rem}
+.dsend{width:44px;height:44px;border-radius:50%;background:var(--surf-btn);color:#fff;flex:none;
+  display:grid;place-items:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.3), var(--e-brand);
+  transition:transform var(--dur) var(--ease)}
+.dsend:hover{transform:translateY(-2px) scale(1.04)}
+.dsend svg{width:17px;height:17px}
+.qr{padding:clamp(1.2rem,2.6vw,1.8rem);display:flex;flex-direction:column;gap:var(--s4);
+  align-items:center;text-align:center;justify-content:center}
+.qr-ph{width:148px;height:148px;border-radius:var(--r3);background:var(--surf-2);
+  display:grid;place-items:center;position:relative;overflow:hidden;
+  box-shadow:0 0 0 1.5px var(--line-2)}
+.qr-ph::before{content:"";position:absolute;inset:16px;opacity:.45;border-radius:6px;
+  background-image:repeating-linear-gradient(0deg,var(--line-3) 0 6px,transparent 6px 12px),
+                   repeating-linear-gradient(90deg,var(--line-3) 0 6px,transparent 6px 12px)}
+.qr-ph span{position:relative;z-index:1;font-size:.69rem;color:var(--ink-3);background:var(--bg);
+  padding:.3rem .6rem;border-radius:var(--r1);box-shadow:var(--ring);line-height:1.5}
+
+/* ============ comparison table ============ */
+.cmp{overflow-x:auto;border-radius:var(--r4);box-shadow:var(--ring), var(--hi), var(--e1)}
+.cmp table{width:100%;border-collapse:collapse;min-width:600px;background:var(--surf-1)}
+.cmp th,.cmp td{padding:.95rem 1.1rem;text-align:start;font-size:.87rem;
+  box-shadow:inset 0 -1px 0 var(--line)}
+.cmp thead th{font-family:var(--disp);font-weight:700;font-size:.88rem;background:var(--surf-2);
+  text-align:center}
+.cmp thead th:first-child{text-align:start}
+.cmp thead th.us{background:var(--surf-brand);color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 var(--line)}
+.cmp td.us{background:var(--brand-tint)}
+.cmp tbody tr:last-child th,.cmp tbody tr:last-child td{box-shadow:none}
+.cmp tbody th{font-weight:600;color:var(--ink)}
+.cmp td{text-align:center;color:var(--ink-2)}
+.mark{display:inline-grid;place-items:center;width:25px;height:25px;border-radius:50%}
+.mark.yes{background:var(--mint-tint);color:var(--mint)}
+.mark.no{background:var(--surf-3);color:var(--ink-4)}
+.mark.part{background:var(--amber-tint);color:var(--amber)}
+.mark svg{width:12px;height:12px;stroke-width:3}
+.cmp td.us .mark.yes{background:var(--brand);color:#fff}
+
+/* ============ trust row ============ */
+.trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(172px,1fr));gap:var(--s3)}
+.tr{padding:var(--s5);display:flex;align-items:center;gap:var(--s3)}
+.tr-k{font-size:.86rem;font-weight:600;line-height:1.4}
+.tr-s{font-size:.71rem;color:var(--ink-3);line-height:1.45}
+.tr.slot{background:var(--surf-2);box-shadow:0 0 0 1.5px var(--line-2)}
+.tr.slot .tr-k{color:var(--ink-3)}
+
+/* ============ testimonial slot with metric ============ */
+.tm{padding:var(--s5);display:flex;flex-direction:column;gap:var(--s2);min-height:232px}
+.tm-top{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s2)}
+.tm-sample{background:var(--surf-3);color:var(--ink-3);box-shadow:var(--ring)}
+.tm-ml{font-size:.72rem;font-weight:600;color:var(--ink-3);margin-top:-4px}
+.tm-n{font-size:.8rem;font-weight:700}
+.tm-s{font-size:.7rem;color:var(--ink-3)}
+.tm-avi{width:38px;height:38px;border-radius:50%;flex:none;display:grid;place-items:center;
+  color:#fff;font-weight:700;font-size:.85rem;box-shadow:inset 0 1px 0 rgba(255,255,255,.3), var(--e1)}
+.tm-c1{background:linear-gradient(135deg,#2E93FF,#0069D8)}
+.tm-c2{background:linear-gradient(135deg,#00B4D8,#0077EE)}
+.tm-c3{background:linear-gradient(135deg,#0F9D58,#0A7D46)}
+.tm-metric{font-family:var(--disp);font-size:1.85rem;font-weight:700;line-height:1;
+  color:var(--ink-4);opacity:.5;font-variant-numeric:tabular-nums}
+.tm-q{font-size:.87rem;line-height:1.8;color:var(--ink-2);margin-top:var(--s2)}
+.tm-w{margin-top:auto;display:flex;align-items:center;gap:var(--s3)}
+.tm-av{width:38px;height:38px;border-radius:50%;background:var(--surf-3);flex:none;box-shadow:var(--ring)}
+.tm-b{height:8px;border-radius:var(--rf);background:var(--surf-3)}
+
+@media (max-width:900px){
+  .calc{grid-template-columns:1fr}
+  .dw{grid-template-columns:1fr}
+}
+
+/* features grid: every card the same size, demo UIs bottom-aligned */
+.featgrid{grid-auto-rows:1fr}
+.featgrid .fc .fc-ui{margin-top:auto}
+
+/* ============ demo hero: input-or-WhatsApp ============ */
+.dwrap{max-width:820px;margin-inline:auto;width:100%}
+.dhero{display:flex;flex-direction:column;gap:var(--s4);animation:rise .5s var(--ease) both}
+
+/* ---- the glowing one-line bar ----
+   Ring: an oversized conic-gradient square spins INSIDE an overflow-hidden
+   pill wrapper — the gradient rasterises once and the rotation is pure
+   compositor work, so the "traveling light" costs nothing per frame.
+   Halo: a STATIC blurred copy of the same gradient behind the bar. Spinning
+   it too would re-run the blur every frame (a filtered subtree invalidates
+   on any inner change); blurred this heavily, rotation wouldn't read anyway. */
+.dglow{position:relative;border-radius:999px}
+.dglow-halo{position:absolute;inset:-2px;border-radius:999px;overflow:hidden;
+  filter:blur(16px);opacity:.55;pointer-events:none}
+.dglow-halo::before{content:"";position:absolute;left:50%;top:50%;
+  width:160%;aspect-ratio:1;translate:-50% -50%;
+  background:conic-gradient(from 0deg,
+    transparent 0deg,var(--brand) 70deg,#00C2F0 140deg,transparent 210deg,
+    var(--brand-lo,#0057C8) 290deg,transparent 360deg)}
+.dbar{position:relative;border-radius:999px;padding:2px;overflow:hidden}
+.dbar::before{content:"";position:absolute;left:50%;top:50%;
+  width:160%;aspect-ratio:1;translate:-50% -50%;
+  background:conic-gradient(from 0deg,
+    transparent 0deg,var(--brand) 70deg,#00C2F0 140deg,transparent 210deg,
+    var(--brand-lo,#0057C8) 290deg,transparent 360deg);
+  animation:dbarSpin 5s linear infinite}
+@keyframes dbarSpin{to{transform:rotate(360deg)}}
+.dbar-in{position:relative;display:flex;align-items:center;gap:var(--s2);
+  border-radius:999px;background:var(--surf-1);
+  padding:.45rem .5rem .45rem;padding-inline-start:1.3rem;
+  box-shadow:var(--hi), inset 0 0 0 1px var(--line-2)}
+.dbar-input{flex:1;min-width:0;background:none;border:0;outline:0;
+  font:inherit;font-size:1rem;color:var(--ink);padding-block:.55rem}
+.dbar-input::placeholder{color:var(--ink-4)}
+.dbar-mic{width:40px;height:40px;flex:none;border-radius:50%;display:grid;
+  place-items:center;color:var(--ink-2);background:var(--surf-2);
+  box-shadow:var(--ring);transition:all var(--dur) var(--ease)}
+.dbar-mic:hover{color:var(--brand-d);background:var(--brand-tint)}
+.dbar-mic svg{width:18px;height:18px}
+.dbar-send{width:40px;height:40px;flex:none;border-radius:50%;display:grid;
+  place-items:center;color:#fff;background:var(--surf-btn);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28), var(--e-brand);
+  transition:transform var(--dur) var(--ease), opacity var(--dur) var(--ease)}
+.dbar-send:hover{transform:translateY(-1px)}
+.dbar-send:disabled{opacity:.5;transform:none}
+.dbar-send svg{width:18px;height:18px}
+
+/* «أو» divider */
+.dor{display:flex;align-items:center;gap:var(--s4);color:var(--ink-3);
+  font-size:.85rem;font-weight:600}
+.dor i{flex:1;height:1px;background:var(--line-2)}
+
+/* WhatsApp entry */
+.dwa{display:flex;align-items:center;justify-content:center;gap:var(--s2);
+  align-self:center;padding:.85rem 1.7rem;border-radius:var(--rf);
+  font-size:.95rem;font-weight:700;color:#fff;
+  background:linear-gradient(160deg,#28D468,#1CA24E);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 4px 10px rgba(18,140,70,.35),
+             0 18px 40px -14px rgba(18,140,70,.55);
+  transition:transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease)}
+.dwa:hover{transform:translateY(-2px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.34), 0 6px 14px rgba(18,140,70,.4),
+             0 24px 52px -16px rgba(18,140,70,.6)}
+.dwa svg{width:19px;height:19px}
+
+/* QR view */
+.dqr{display:flex;flex-direction:column;align-items:center;gap:var(--s4);
+  padding:clamp(1.4rem,3vw,2rem);max-width:420px;margin-inline:auto;
+  animation:rise .5s var(--ease) both}
+.dq-code{width:min(210px,60vw);height:auto;color:var(--ink);
+  background:#fff;border-radius:var(--r3);padding:14px;
+  box-shadow:var(--ring), var(--e2)}
+
+/* chat state tweaks: centered solo box, back chip, voice bubble */
+/* Send expands the chat open in place. Simple by request: the container
+   unrolls and the contents fade in once. The radius starts only slightly
+   rounder than the card and settles to the card radius within the first
+   third — corners never balloon while the box scales up. */
+.dbox-solo{max-width:100%;overflow:hidden;
+  animation:dboxGrow .5s cubic-bezier(.22,.9,.24,1) both}
+.dbox-solo>*{opacity:0;animation:dboxIn .4s var(--ease) .16s both}
+@keyframes dboxGrow{
+  0%{max-height:66px;border-radius:26px}
+  35%{border-radius:var(--r4)}
+  100%{max-height:760px;border-radius:var(--r4)}
+}
+@keyframes dboxIn{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:none}
+}
+.dt-back{flex:0 0 auto;display:grid;place-items:center;width:34px}
+.dt-back svg{width:15px;height:15px}
+.dvn{display:inline-flex;align-items:center;gap:8px;min-width:170px}
+.dvn>svg{width:15px;height:15px;color:var(--brand)}
+.dvn-bars{display:flex;align-items:center;gap:2.5px;flex:1}
+.dvn-bars i{width:3px;border-radius:2px;background:var(--ink-3)}
+.dvn .num{font-size:.68rem;color:var(--ink-3)}

@@ -1,0 +1,43 @@
+/* ============================================================
+   SPLASH INTRO  (components/SplashIntro.tsx)
+   The 3D mark holds centre stage over a veil, then flies down
+   and lands on the hero core's measured rect. Position flies
+   via left/top/width so the landing values are plain pixels.
+   ============================================================ */
+
+.spl{position:fixed;inset:0;z-index:200}
+.spl.flying{pointer-events:none}
+
+.spl-veil{position:absolute;inset:0;background:var(--bg);
+  transition:opacity .75s var(--ease) .12s}
+
+/* radar rings behind the mark, echoing the hero disc */
+.spl-ring{position:absolute;left:50vw;top:42vh;
+  width:clamp(140px,19vw,190px);aspect-ratio:1;border-radius:50%;
+  border:1.5px solid var(--brand);opacity:0;
+  transform:translate(-50%,-50%);
+  animation:splRing 2.6s ease-out infinite}
+.spl-ring.r2{animation-delay:-.87s}
+.spl-ring.r3{animation-delay:-1.73s}
+@keyframes splRing{
+  0%  {transform:translate(-50%,-50%) scale(.6);opacity:0}
+  18% {opacity:.4}
+  100%{transform:translate(-50%,-50%) scale(2.1);opacity:0}
+}
+
+.spl-mark{--splW:clamp(112px,15vw,148px);--splH:calc(var(--splW) * 1.111);
+  position:fixed;width:var(--splW);
+  left:calc(50vw - var(--splW)/2);top:calc(42vh - var(--splH)/2)}
+.spl.flying .spl-mark{
+  transition:left .95s cubic-bezier(.6,.04,.16,1),
+             top .95s cubic-bezier(.6,.04,.16,1),
+             width .95s cubic-bezier(.6,.04,.16,1),
+             opacity .6s var(--ease)}
+.spl-mark .l3d{width:100%;animation:splBreathe 2.2s var(--ease-io) infinite}
+.spl.flying .spl-mark .l3d{animation:none}
+@keyframes splBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+
+/* while the splash owns the mark: no scroll, and the real hero
+   logo stays hidden until the landing frame swaps them */
+body.rd-splash{overflow:hidden}
+body.rd-splash .fs-core .l3d{visibility:hidden}

@@ -1,0 +1,225 @@
+/* ============================================================
+   HERO FLOW — questions converge on the logo, shrink until they
+   fit behind it, and vanish under it. Answers grow back out.
+
+   Position and scale live on TWO elements:
+     .fs-chip  — travel only, one continuous ease
+     .fs-body  — scale / opacity only, on its own curve
+   Sharing a single timing function forced the two to fight, which
+   is what produced the speed jump at the logo. Split, the chip can
+   glide to a standstill at the throat and the answer can leave from
+   that same standstill — velocity is zero on both sides, so the
+   hand-off is seamless.
+
+   One --fsDur cycle per lane: question owns 0–50%, answer 50–100%.
+   Twelve lanes 2s apart, all travelling right to left, phased with negative delays so all of them
+   are already in flight on load.
+   Uniform scale only — nothing is stretched or distorted.
+   ============================================================ */
+.fs{position:relative;contain:layout style;height:clamp(300px,29vw,392px);margin-block:clamp(18px,2.6vw,34px) clamp(.9rem,2vw,1.5rem);
+  width:100vw;margin-inline-start:calc(50% - 50vw);
+  z-index:2;--fsL:clamp(56px,5.9vw,70px);--fsY:19%;--fsDur:21.6s;--fsDisc:calc(var(--fsL) * 1.62);}
+
+
+/* Frosted veil behind the mark. Four blocks so the theme toggle beats the
+   system preference in both directions, matching the navbar tokens. */
+:root{--fs-veil:rgba(255,255,255,.52);--fs-halo:rgba(46,147,255,.30);--fs-halo-2:rgba(46,147,255,.14)}
+@media (prefers-color-scheme:dark){:root{--fs-veil:rgba(11,30,54,.44);--fs-halo:rgba(70,165,255,.42);--fs-halo-2:rgba(50,140,255,.20)}}
+:root[data-theme="dark"]{--fs-veil:rgba(11,30,54,.44);--fs-halo:rgba(70,165,255,.42);--fs-halo-2:rgba(50,140,255,.20)}
+:root[data-theme="light"]{--fs-veil:rgba(255,255,255,.52);--fs-halo:rgba(46,147,255,.30);--fs-halo-2:rgba(46,147,255,.14)}
+
+/* ---- disc + concentric rings, matching the hub diagram ---- */
+.fs-glow{position:absolute;left:50%;top:var(--fsY);z-index:4;
+  width:var(--fsDisc);aspect-ratio:1;border-radius:50%;
+  transform:translate(-50%,-50%);pointer-events:none;
+  background:var(--fs-veil);
+  -webkit-backdrop-filter:blur(9px) saturate(1.15);
+  backdrop-filter:blur(9px) saturate(1.15);
+  box-shadow:var(--ring), var(--hi), var(--e2),
+             0 0 clamp(30px,3.6vw,52px) var(--fs-halo),
+             0 0 clamp(64px,7.4vw,104px) var(--fs-halo-2)}
+
+.fs-rg{position:absolute;left:50%;top:var(--fsY);z-index:1;
+  width:var(--fsDisc);aspect-ratio:1;border-radius:50%;
+  transform:translate(-50%,-50%);pointer-events:none;
+  border:1.5px solid var(--brand);opacity:.45;
+  animation:fsRg 3.4s ease-out infinite}
+.fs-rg.r2{animation-delay:-1.13s}
+.fs-rg.r3{animation-delay:-2.27s}
+@keyframes fsRg{
+  0%      {transform:translate(-50%,-50%) scale(1);opacity:.45}
+  75%,100%{transform:translate(-50%,-50%) scale(2.4);opacity:0}
+}
+
+/* ---- beams : light walking those rails ---- */
+.fs-beams{position:absolute;inset:0;z-index:0;pointer-events:none}
+.fs-beam{position:absolute;top:0;left:0;pointer-events:none;
+  width:clamp(52px,5.6vw,84px);height:3px;border-radius:3px;
+  offset-rotate:auto;offset-distance:0%;
+  background:linear-gradient(90deg,transparent,var(--bc,#7CC9FF) 52%,transparent);
+  animation:fsStreak var(--bd,4.5s) linear infinite}
+@keyframes fsStreak{
+  0%  {offset-distance:100%;opacity:0}
+  10% {opacity:.85}
+  38% {opacity:.5}
+  47% {opacity:0}
+  53% {opacity:0}
+  62% {opacity:.5}
+  90% {opacity:.85}
+  100%{offset-distance:0%;  opacity:0}
+}
+
+.fs-depth{position:absolute;inset:0;z-index:3}
+.fs-track{position:absolute;inset:0;
+  perspective:900px;perspective-origin:50% var(--fsY);
+  transform-style:preserve-3d}
+
+/* ---- travel wrapper : nothing but position ---- */
+.fs-chip{position:absolute;top:0;left:0;z-index:2;display:inline-flex;
+  offset-rotate:auto;offset-distance:100%}
+
+/* ---- the visible pill : nothing but scale and fade ---- */
+.fs-body{display:inline-flex;align-items:center;gap:.5rem;white-space:nowrap;
+  padding:.55rem .9rem;border-radius:var(--rf);font-size:.84rem;font-weight:600;
+  background:var(--surf-1);color:var(--ink);
+  box-shadow:var(--ring-2), var(--hi), var(--e2);
+  transform-origin:center;opacity:0}
+.fs-ch{width:17px;height:17px;flex:none;border-radius:50%;display:grid;place-items:center}
+.fs-ch svg{width:11px;height:11px;color:#fff}
+.fs-chip.out .fs-body{background:var(--surf-btn);color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3), var(--e-brand)}
+.fs-tick{width:17px;height:17px;border-radius:50%;background:rgba(255,255,255,.26);
+  display:grid;place-items:center;flex:none}
+.fs-tick svg{width:9px;height:9px;stroke-width:3.6;color:#fff}
+
+/* ---- voice-note questions : play + waveform + duration ----
+   Sized in em so the whole note shrinks with the chip's font size.
+   The bars pulse as if playing; negative delays stagger them, and the
+   hover speed-up accelerates them along with everything else. */
+.fs-vnote{display:inline-flex;align-items:center;gap:.45em}
+.fs-vplay{width:1.05em;height:1.05em;flex:none;opacity:.8}
+.fs-wave{display:inline-flex;align-items:center;gap:.16em}
+.fs-wave i{width:.2em;min-width:2px;border-radius:99px;background:currentColor;
+  opacity:.6;transform-origin:center;animation:fsWave 1.15s ease-in-out infinite}
+@keyframes fsWave{0%,100%{transform:scaleY(.62);opacity:.45}50%{transform:scaleY(1);opacity:.8}}
+.fs-vdur{font-size:.82em;font-weight:600;opacity:.65}
+.fs-chip.out .fs-vdur{opacity:.85}
+
+
+/* ---- the logo, on top: it is what conceals the chips ---- */
+.fs-core{position:absolute;left:50%;top:var(--fsY);z-index:6;width:var(--fsL);
+  transform:translate(-50%,-50%);filter:drop-shadow(0 8px 24px rgba(0,119,238,.45))}
+.fs-core .l3d{width:100%}
+
+/* ---- hover : the mark eases up in size and the flow rushes ----
+   The scale rides .l3d (the perspective wrapper) because the stage's
+   transform is owned by the tilt loop, and .fs-core's by centering.
+   JS ramps every flow animation's playbackRate on the same hover. */
+.fs-core .l3d{transition:transform .45s var(--ease)}
+.fs-core:hover .l3d{transform:scale(1.12)}
+.fs-glow{transition:box-shadow var(--dur-l) var(--ease)}
+.fs:has(.fs-core:hover) .fs-glow{
+  box-shadow:var(--ring), var(--hi), var(--e2),
+             0 0 clamp(38px,4.6vw,64px) var(--fs-halo),
+             0 0 clamp(80px,9.2vw,130px) var(--fs-halo-2)}
+
+
+/* ---- travel : along the rails ----
+   offset-distance runs 100% -> 50% -> 0%, so a message enters from
+   the right, reaches the logo at the path midpoint, and leaves left.
+   offset-rotate:auto tilts each chip to the curve's tangent. */
+.fs-chip.in{animation:fsPathIn var(--fsDur) linear infinite;animation-delay:var(--d,0s)}
+@keyframes fsPathIn{
+  0%      {offset-distance:100%;transform:translateZ(240px) rotateY(-26deg)}
+  50%,100%{offset-distance:50%;transform:translateZ(-320px) rotateY(0deg)}
+}
+.fs-chip.out{animation:fsPathOut var(--fsDur) linear infinite;animation-delay:var(--d,0s)}
+@keyframes fsPathOut{
+  0%,50%{offset-distance:50%;transform:translateZ(-320px) rotateY(0deg)}
+  100%  {offset-distance:0%;transform:translateZ(240px) rotateY(26deg)}
+}
+
+/* ---- scale and fade : independent, so the shrink stays near the logo.
+   Opacity only at the far edges; the mask handles the logo. ---- */
+.fs-chip.in .fs-body{animation:fsBodyIn var(--fsDur) infinite;animation-delay:var(--d,0s)}
+@keyframes fsBodyIn{
+  0%   {opacity:0}
+  8%   {opacity:1}
+  34%  {opacity:.92}
+  46%  {opacity:.6}
+  50%  {opacity:0}
+  100% {opacity:0}
+}
+.fs-chip.out .fs-body{animation:fsBodyOut var(--fsDur) infinite;animation-delay:var(--d,0s)}
+@keyframes fsBodyOut{
+  0%,50%{opacity:0}
+  54%   {opacity:.55}
+  70%   {opacity:.9}
+  90%   {opacity:1}
+  100%  {opacity:0}
+}
+
+@media (max-width:1100px){
+  .fs{height:clamp(250px,25vw,310px);--fsL:clamp(50px,5.4vw,62px)}
+  .fs-body{font-size:.79rem;padding:.5rem .8rem}
+}
+@media (max-width:860px){
+  .fs{height:238px;--fsL:clamp(48px,6.8vw,58px)}
+  .fs-body{font-size:.74rem;padding:.44rem .72rem}
+  .fs-ch,.fs-tick{width:15px;height:15px}
+  .fs-chip.lane-far{display:none}
+}
+@media (max-width:640px){
+  .fs{height:204px;--fsL:clamp(44px,9.5vw,52px)}
+  .fs-body{font-size:.68rem;padding:.38rem .62rem;gap:.35rem}
+  .fs-ch,.fs-tick{width:13px;height:13px}
+  .fs-ch svg{width:9px;height:9px}
+  .fs-beam{width:clamp(40px,4.6vw,60px);height:2px}
+}
+@media (max-width:460px){
+  .fs{height:176px;--fsL:42px}
+  .fs-body{font-size:.62rem;padding:.32rem .54rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .fs-chip,.fs-body,.fs-core,.fs-rg,.fs-beam{animation:none}
+  .fs-body{opacity:1}
+  .fs-chip.in{offset-distance:82%;transform:translateZ(120px) rotateY(-13deg)}
+  .fs-chip.out{offset-distance:18%;transform:translateZ(120px) rotateY(13deg)}
+}
+
+
+/* ============================================================
+   The orb symbol blinks. Two quick blinks per 6s, then a wink
+   where only the right eye closes and holds a beat longer.
+   fill-box keeps each eye scaling about its own centre.
+   (The hero core is now the 3D mark, which blinks on its own.)
+   ============================================================ */
+.orb-core .rd-eye{transform-box:fill-box;transform-origin:center}
+.orb-core .rd-eye-l{animation:rdBlink 6s infinite}
+.orb-core .rd-eye-r{animation:rdWink 6s infinite}
+@keyframes rdBlink{
+  0%,24.2%  {transform:scaleY(1)}
+  25%       {transform:scaleY(.08)}
+  25.8%     {transform:scaleY(1)}
+  69.2%     {transform:scaleY(1)}
+  70%       {transform:scaleY(.08)}
+  70.8%,100%{transform:scaleY(1)}
+}
+@keyframes rdWink{
+  0%,24.2%  {transform:scaleY(1)}
+  25%       {transform:scaleY(.08)}
+  25.8%     {transform:scaleY(1)}
+  69.2%     {transform:scaleY(1)}
+  70%       {transform:scaleY(.08)}
+  70.8%     {transform:scaleY(1)}
+  88.4%     {transform:scaleY(1)}
+  89.6%     {transform:scaleY(.08)}
+  92.4%     {transform:scaleY(.08)}
+  93.6%,100%{transform:scaleY(1)}
+}
+@media (prefers-reduced-motion:reduce){
+  .orb-core .rd-eye{animation:none}
+}
+
+/* Anything scrolled out of view stops costing frames. */
+.anim-off,.anim-off *{animation-play-state:paused !important}

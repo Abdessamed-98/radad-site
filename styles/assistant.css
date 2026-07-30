@@ -1,0 +1,111 @@
+/* ============================================================
+   3D LOGO MARK  (components/Logo3D.tsx)
+   The mark rebuilt as a real CSS-3D object: 14 shaded wall
+   slices extrude the bubble silhouette, and the band / face /
+   features sit on raised Z planes for parallax under tilt.
+   Shared by the floating assistant and the hero core — the
+   parent sets the width, height follows the 36:40 aspect.
+   ============================================================ */
+
+.l3d{display:block;perspective:620px}
+/* the 3D stage: JS writes rotateX/rotateY here every frame */
+.l3d-stage{position:relative;display:block;width:100%;aspect-ratio:36/40;
+  transform-style:preserve-3d;will-change:transform}
+.l3d-stage svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;
+  backface-visibility:hidden}
+
+/* pupils drift toward the cursor (unit space ≈ viewBox px) + idle blink */
+.l3d-eyes{transform:translate(var(--l3d-ex,0px),var(--l3d-ey,0px))}
+.l3d-blink{animation:l3d-blink 4.4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes l3d-blink{0%,91%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
+
+/* ============================================================
+   FLOATING ASSISTANT  (components/ChatAssistant.tsx)
+   ============================================================ */
+
+.rda-root{position:fixed;bottom:clamp(14px,3vw,26px);inset-inline-end:clamp(14px,3vw,26px);
+  z-index:120;display:flex;flex-direction:column;align-items:flex-end;gap:var(--s3)}
+
+/* ---------------- the bot ---------------- */
+.rda-bot{position:relative;width:78px;height:86px;display:grid;place-items:center;
+  border-radius:var(--rf);-webkit-tap-highlight-color:transparent;
+  transition:transform var(--dur) var(--ease)}
+.rda-bot:hover{transform:scale(1.06)}
+.rda-bot:active{transform:scale(.98)}
+.rda-bot .l3d{width:62px}
+
+/* idle float — a wrapper so the bob transform never fights the tilt */
+.rda-bob{display:block;animation:rda-bob 4.6s var(--ease-io) infinite;will-change:transform}
+@keyframes rda-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+/* grounding shadow, breathing opposite the bob */
+.rda-ground{position:absolute;bottom:0;left:50%;width:52px;height:12px;margin-left:-26px;
+  border-radius:50%;pointer-events:none;filter:blur(3px);
+  background:radial-gradient(50% 50% at 50% 50%, rgba(var(--shade),.38), transparent 72%);
+  animation:rda-ground 4.6s var(--ease-io) infinite}
+@keyframes rda-ground{0%,100%{transform:scaleX(1);opacity:.75}50%{transform:scaleX(.8);opacity:.4}}
+
+/* ---------------- the panel ---------------- */
+.rda-panel{width:min(370px, calc(100vw - 28px));height:min(66vh, 520px);
+  display:flex;flex-direction:column;overflow:hidden;
+  background:var(--surf-1);border-radius:var(--r4);
+  box-shadow:var(--ring-2), var(--hi), var(--e4);
+  transform-origin:100% 100%;animation:rda-pop .32s var(--ease)}
+:root[dir="rtl"] .rda-panel{transform-origin:0% 100%}
+@keyframes rda-pop{from{opacity:0;transform:translateY(14px) scale(.94)}}
+
+.rda-head{display:flex;align-items:center;gap:var(--s3);padding:.8rem .95rem;
+  box-shadow:0 1px 0 var(--line-2)}
+.rda-mini{width:30px;height:33px;flex:none}
+.rda-head-t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.rda-head-t strong{font-family:var(--disp);font-size:.94rem;font-weight:600;color:var(--ink);line-height:1.3}
+.rda-status{display:flex;align-items:center;gap:6px;font-size:.74rem;color:var(--ink-3);line-height:1.3}
+.rda-status i{width:7px;height:7px;border-radius:50%;background:var(--mint);flex:none;
+  box-shadow:0 0 0 3px var(--mint-tint)}
+.rda-x{width:32px;height:32px;flex:none;display:grid;place-items:center;
+  border-radius:var(--r2);color:var(--ink-3);
+  transition:color var(--dur) var(--ease), background var(--dur) var(--ease)}
+.rda-x:hover{color:var(--ink);background:var(--surf-3)}
+.rda-x svg{width:16px;height:16px}
+
+.rda-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:var(--s2);
+  padding:var(--s4);overscroll-behavior:contain;scroll-behavior:smooth}
+.rda-msg{max-width:82%;padding:.58rem .85rem;border-radius:14px;
+  font-size:.88rem;line-height:1.65;overflow-wrap:break-word;
+  animation:rda-msg-in .28s var(--ease)}
+@keyframes rda-msg-in{from{opacity:0;transform:translateY(8px)}}
+.rda-msg.bot{align-self:flex-start;background:var(--surf-2);color:var(--ink);
+  box-shadow:var(--ring), var(--hi);border-start-start-radius:4px}
+.rda-msg.user{align-self:flex-end;background:var(--surf-btn);color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25), var(--e1);border-start-end-radius:4px}
+
+.rda-typing{display:flex;align-items:center;gap:5px;padding-block:.75rem}
+.rda-typing i{width:6px;height:6px;border-radius:50%;background:var(--ink-3);
+  animation:rda-dot 1.1s ease-in-out infinite}
+.rda-typing i:nth-child(2){animation-delay:.15s}
+.rda-typing i:nth-child(3){animation-delay:.3s}
+@keyframes rda-dot{0%,60%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-4px);opacity:1}}
+
+.rda-inrow{display:flex;align-items:center;gap:var(--s2);padding:var(--s3);
+  box-shadow:0 -1px 0 var(--line)}
+.rda-field{flex:1;min-width:0;font:inherit;font-size:.9rem;color:var(--ink);
+  padding:.62rem 1rem;border:0;border-radius:var(--rf);background:var(--surf-2);
+  box-shadow:var(--ring-2), inset 0 1px 2px rgba(var(--shade),.04);
+  transition:box-shadow var(--dur) var(--ease), background var(--dur) var(--ease)}
+.rda-field::placeholder{color:var(--ink-4)}
+.rda-field:focus{outline:none;background:var(--bg);
+  box-shadow:0 0 0 1px var(--brand), var(--focus)}
+.rda-send{width:42px;height:42px;flex:none;display:grid;place-items:center;
+  border-radius:50%;color:#fff;background:var(--surf-btn);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3), var(--e-brand);
+  transition:transform var(--dur) var(--ease), opacity var(--dur) var(--ease),
+             box-shadow var(--dur) var(--ease)}
+.rda-send:hover:not(:disabled){transform:translateY(-2px)}
+.rda-send:active:not(:disabled){transform:translateY(0)}
+.rda-send:disabled{opacity:.45;cursor:default}
+.rda-send svg{width:18px;height:18px}
+:root[dir="rtl"] .rda-send svg{transform:scaleX(-1)}
+
+@media (prefers-reduced-motion:reduce){
+  .rda-bob,.rda-ground,.l3d-blink{animation:none}
+}

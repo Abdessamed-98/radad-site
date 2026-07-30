@@ -1,0 +1,149 @@
+/* ============================================================
+   FLOATING NAVBAR
+   A pill that hovers clear of the page edges instead of a bar
+   bolted to the top. Lightly glassed: a translucent ground with
+   a backdrop blur, so content ghosts past underneath while the
+   pill stays readable. --nav-solid keeps the CTA text crisp.
+   ============================================================ */
+:root{
+  --nav-h:calc(clamp(10px,1.3vw,16px) + 52px);   /* pad-top + pill height */
+  --nav-bg:rgba(255,255,255,.72);
+  --nav-solid:#FFFFFF;
+  --nav-ink:#052659;
+  --nav-mut:#4C6489;
+  --nav-soft:rgba(5,38,89,.055);
+  --nav-line:rgba(5,38,89,.10);
+  --nav-act:rgba(5,38,89,.075);
+  --nav-veil:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,.10));
+  --nav-edge:rgba(255,255,255,.95);
+}
+@media (prefers-color-scheme:dark){:root{
+  --nav-bg:rgba(14,33,54,.64);
+  --nav-solid:#0E2136;
+  --nav-ink:#FFFFFF;
+  --nav-mut:rgba(255,255,255,.62);
+  --nav-soft:rgba(255,255,255,.07);
+  --nav-line:rgba(255,255,255,.11);
+  --nav-act:rgba(255,255,255,.14);
+  --nav-veil:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.015));
+  --nav-edge:rgba(255,255,255,.16);
+}}
+:root[data-theme="dark"]{
+  --nav-bg:rgba(14,33,54,.64);
+  --nav-solid:#0E2136;
+  --nav-ink:#FFFFFF;
+  --nav-mut:rgba(255,255,255,.62);
+  --nav-soft:rgba(255,255,255,.07);
+  --nav-line:rgba(255,255,255,.11);
+  --nav-act:rgba(255,255,255,.14);
+  --nav-veil:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.015));
+  --nav-edge:rgba(255,255,255,.16);
+}
+:root[data-theme="light"]{
+  --nav-bg:rgba(255,255,255,.72);
+  --nav-solid:#FFFFFF;
+  --nav-ink:#052659;
+  --nav-mut:#4C6489;
+  --nav-soft:rgba(5,38,89,.055);
+  --nav-line:rgba(5,38,89,.10);
+  --nav-act:rgba(5,38,89,.075);
+  --nav-veil:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,.10));
+  --nav-edge:rgba(255,255,255,.95);
+}
+
+.hdr{position:fixed;inset-inline:0;top:0;z-index:90;
+  padding-block:clamp(10px,1.3vw,16px) 0;
+  background:none;box-shadow:none;
+  transition:transform .38s cubic-bezier(.2,.8,.3,1)}
+/* far enough to clear the pill's shadow as well as the pill */
+.hdr.nav-hide{transform:translateY(calc(-100% - 18px))}
+.hdr.stuck{background:none;box-shadow:none}
+
+/* every page clears the fixed pill; the hero cancels it and re-pads
+   internally so its background still runs to the very top */
+main{padding-top:var(--nav-h)}
+
+.hdr-in{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;gap:var(--s4);
+  height:auto;min-height:52px;padding:8px 8px 8px var(--s5);
+  background:var(--nav-veil),var(--nav-bg);border-radius:var(--rf);color:var(--nav-ink);
+  -webkit-backdrop-filter:blur(14px) saturate(1.3);
+  backdrop-filter:blur(14px) saturate(1.3);
+  box-shadow:inset 0 1px 0 var(--nav-edge),
+             inset 0 0 0 1px var(--nav-line),
+             var(--e2);
+  max-width:var(--maxw);margin-inline:auto;
+  transition:box-shadow var(--dur-l) var(--ease),
+             max-width .9s cubic-bezier(.16,1,.3,1) .3s,
+             opacity .32s var(--ease) .3s}
+
+/* reveal : while the splash holds, the pill is invisible; when the veil
+   starts fading (the splash drops rd-splash-hold) it waits a beat — the
+   transition delays hold the hidden collapsed state — then fades in as
+   it grows outward with ease-out, content following once it has width */
+.hdr-in>*{transition:opacity .45s var(--ease) .65s}
+body.rd-splash-hold .hdr-in{max-width:96px;opacity:0;overflow:hidden;transition:none}
+body.rd-splash-hold .hdr-in>*{opacity:0;transition:none}
+.hdr.stuck .hdr-in{box-shadow:inset 0 1px 0 var(--nav-edge),
+             inset 0 0 0 1px var(--nav-line),
+             var(--e3)}
+:root[dir="rtl"] .hdr-in{padding:8px var(--s5) 8px 8px}
+
+.hdr .brand{justify-self:start}
+.hdr .navwrap{justify-self:center;margin-inline:0}
+.hdr .hdr-act{justify-self:end}
+
+/* the wordmark follows currentColor, so it turns white on the pill */
+.hdr .brand{color:var(--nav-ink)}
+.hdr .logo-lock{color:var(--nav-ink)}
+.hdr .brand-t{color:var(--nav-ink)}
+
+/* inner nav track */
+.hdr .nav{background:var(--nav-soft);box-shadow:inset 0 0 0 1px var(--nav-line);
+  padding:4px}
+.hdr .nav a{color:var(--nav-mut)}
+.hdr .nav a:hover{color:var(--nav-ink)}
+.hdr .nav a.on{background:var(--nav-act);color:var(--nav-ink);
+  box-shadow:inset 0 0 0 1px var(--nav-line)}
+
+/* controls */
+.hdr .ibtn{color:var(--nav-mut)}
+.hdr .ibtn:hover{background:var(--nav-soft);color:var(--nav-ink);box-shadow:none}
+.hdr .lang{color:var(--nav-mut);box-shadow:inset 0 0 0 1px var(--nav-line)}
+.hdr .lang:hover{color:var(--nav-ink);background:var(--nav-soft);
+  box-shadow:inset 0 0 0 1px var(--nav-line)}
+
+/* the CTA inverts against the dark pill */
+/* swaps ink and ground, so it inverts in either theme */
+.hdr #navCta{background:var(--nav-ink);color:var(--nav-solid);box-shadow:var(--e2)}
+.hdr #navCta:hover{background:var(--brand);color:#fff;transform:translateY(-1px);
+  box-shadow:0 6px 18px -6px rgba(0,119,238,.6)}
+
+/* trimmed controls to suit the slimmer pill */
+.hdr .nav a{padding:.38rem .82rem;font-size:.85rem}
+.hdr .nav{padding:3px}
+.hdr .ibtn{width:32px;height:32px}
+.hdr .lang{padding:.32rem .56rem;font-size:.75rem}
+.hdr #navCta{padding:.5rem 1.05rem;font-size:.84rem}
+.hdr .logo-lock{height:28px}
+.hdr .logo-sym{height:27px}
+
+/* mobile sheet hangs off the pill rather than the viewport top */
+@media (max-width:860px){
+  :root{--nav-h:calc(clamp(10px,1.3vw,16px) + 48px)}
+  .hdr-in{display:flex;justify-content:space-between;min-height:48px;padding:7px 7px 7px var(--s4)}
+  :root[dir="rtl"] .hdr-in{padding:7px var(--s4) 7px 7px}
+  .navwrap{position:absolute;inset-inline:0;top:calc(100% + 8px);margin:0;
+    padding-inline:var(--gut)}
+  .hdr .nav{flex-direction:column;width:100%;border-radius:var(--r4);
+    background:var(--nav-bg);padding:var(--s3);
+    -webkit-backdrop-filter:blur(18px) saturate(1.3);
+    backdrop-filter:blur(18px) saturate(1.3);
+    box-shadow:0 0 0 1px var(--nav-line), var(--e4)}
+  .hdr .nav a{padding:.7rem .9rem;text-align:start;border-radius:var(--r2)}
+}
+
+
+@media (prefers-reduced-motion:reduce){
+  .hdr{transition:none}
+}

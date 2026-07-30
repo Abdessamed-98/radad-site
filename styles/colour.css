@@ -1,0 +1,179 @@
+/* ============================================================
+   COLOUR — section bands + gradient-filled cards
+   ============================================================ */
+
+/* ---- full-bleed section bands ---- */
+.sec-white{background:var(--bg-2);position:relative}
+/* Radial layers rather than blurred pseudo-orbs — a blurred circle inside
+   overflow:hidden gets clipped to a hard rectangle at the section edge. */
+.sec-tint{position:relative;
+  background:
+    radial-gradient(44% 40% at 12% 4%, rgba(0,140,240,.22), transparent 64%),
+    radial-gradient(40% 38% at 88% 96%, rgba(0,180,235,.20), transparent 64%),
+    linear-gradient(180deg,#E4F1FE 0%,#DFEEFB 58%,#EAF4FC 100%)}
+:root[data-theme="dark"] .sec-tint,
+:root:not([data-theme="light"]) .sec-tint{
+  background:
+    radial-gradient(44% 40% at 12% 4%, rgba(10,100,200,.30), transparent 64%),
+    radial-gradient(40% 38% at 88% 96%, rgba(0,120,180,.26), transparent 64%),
+    linear-gradient(180deg,#04182E 0%,#051524 60%,#04101E 100%)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .sec-tint{
+  background:
+    radial-gradient(44% 40% at 12% 4%, rgba(0,140,240,.22), transparent 64%),
+    radial-gradient(40% 38% at 88% 96%, rgba(0,180,235,.20), transparent 64%),
+    linear-gradient(180deg,#E4F1FE 0%,#DFEEFB 58%,#EAF4FC 100%)}}
+.sec-tint>*{position:relative;z-index:1}
+
+.sec-dark{position:relative;overflow:hidden;color:#fff;
+  background:linear-gradient(180deg,#063B78 0%,#052A55 45%,#03121F 100%)}
+.sec-dark::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:radial-gradient(50% 42% at 18% 8%,rgba(61,155,255,.55),transparent 62%),
+             radial-gradient(45% 38% at 84% 4%,rgba(0,180,240,.42),transparent 62%)}
+.sec-dark::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.28;
+  background-image:radial-gradient(1.3px 1.3px at 18% 24%,#fff,transparent),
+    radial-gradient(1.1px 1.1px at 68% 16%,#fff,transparent),
+    radial-gradient(1.5px 1.5px at 42% 62%,#fff,transparent),
+    radial-gradient(1.2px 1.2px at 86% 74%,#fff,transparent),
+    radial-gradient(1.2px 1.2px at 28% 86%,#fff,transparent)}
+.sec-dark>*{position:relative;z-index:1}
+.sec-dark .t-h1,.sec-dark .t-h2,.sec-dark .t-h3,.sec-dark .t-h4{color:#fff}
+.sec-dark .t-lead,.sec-dark .t-body,.sec-dark .t-sm{color:rgba(255,255,255,.76)}
+.sec-dark .t-cap{color:rgba(255,255,255,.55)}
+.sec-dark .badge{background:rgba(255,255,255,.13);color:#fff;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.sec-dark .badge i{background:#fff}
+.sec-dark .surface{background:rgba(255,255,255,.07);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.13), inset 0 1px 0 rgba(255,255,255,.10)}
+.sec-dark .surface.lift:hover{background:rgba(255,255,255,.11);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.22), 0 20px 44px -14px rgba(0,0,0,.7)}
+.sec-dark .tr-k{color:#fff}
+.sec-dark .tr-s{color:rgba(255,255,255,.58)}
+.sec-dark .ico-tint{background:rgba(255,255,255,.15);color:#fff;box-shadow:none}
+.sec-dark .ico-neutral{background:rgba(255,255,255,.10);color:rgba(255,255,255,.7);box-shadow:none}
+.sec-dark .tr.slot{background:transparent;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.22)}
+.sec-dark .note{background:rgba(255,255,255,.09);color:rgba(255,255,255,.78);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)}
+.sec-dark .note svg{color:#fff}
+.sec-dark .qa{background:rgba(255,255,255,.07);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.13)}
+.sec-dark .qa[open]{box-shadow:inset 0 0 0 1px rgba(255,255,255,.26)}
+.sec-dark .qa summary{color:#fff}
+.sec-dark .qa-a{color:rgba(255,255,255,.72)}
+.sec-dark .qa-i{background:rgba(255,255,255,.13);color:#fff;box-shadow:none}
+.sec-dark .cmp{box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.sec-dark .cmp table{background:transparent}
+.sec-dark .cmp th,.sec-dark .cmp td{box-shadow:inset 0 -1px 0 rgba(255,255,255,.11);color:rgba(255,255,255,.8)}
+.sec-dark .cmp thead th{background:rgba(255,255,255,.07);color:#fff}
+.sec-dark .cmp tbody th{color:#fff}
+.sec-dark .cmp td.us{background:rgba(61,155,255,.20)}
+.sec-dark .mark.no{background:rgba(255,255,255,.10);color:rgba(255,255,255,.45)}
+
+
+
+/* highlight strength for the feature cards — bright on light, faint on dark */
+:root{--fc-hi-g:rgba(255,255,255,.28); --fc-hi-g2:rgba(255,255,255,.35);
+  --fc-hi-t:rgba(255,255,255,.9);}
+:root[data-theme="dark"]{
+  --fc-hi-g:rgba(255,255,255,.08); --fc-hi-g2:rgba(255,255,255,.12);
+  --fc-hi-t:rgba(255,255,255,.06);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --fc-hi-g:rgba(255,255,255,.08); --fc-hi-g2:rgba(255,255,255,.12);
+  --fc-hi-t:rgba(255,255,255,.06);
+}}
+
+/* ---- gradient-card + inner-panel tokens (dark-capable) ---- */
+:root{
+  --fcv-g:linear-gradient(155deg,#00C2F0 0%,#0090F0 42%,#0077EE 100%);
+  --fcb-g:linear-gradient(155deg,#3D9BFF 0%,#0A63C8 48%,#0077EE 100%);
+  --fcp-g:linear-gradient(155deg,#2E93FF 0%,#0077EE 46%,#0057C8 100%);
+  --fcui-bg:#fff; --fcui-ink:#052659; --fcui-mut:#7B8FAC;
+  --fcui-row:#FBFBFE; --fcui-ring:rgba(5,38,89,.075); --fcui-hi:rgba(255,255,255,.9);
+  --fcui-bub:#E9F2FA; --fcui-bar:#EDEEF7;
+}
+:root[data-theme="dark"]{
+  --fcv-g:linear-gradient(155deg,#02708F 0%,#03599C 42%,#07417E 100%);
+  --fcb-g:linear-gradient(155deg,#1E5FA8 0%,#093C74 48%,#0B4A94 100%);
+  --fcp-g:linear-gradient(155deg,#1B62B4 0%,#0A4C94 46%,#08386F 100%);
+  --fcui-bg:#0E2136; --fcui-ink:#EAF2FF; --fcui-mut:#8FA6C6;
+  --fcui-row:rgba(255,255,255,.07); --fcui-ring:rgba(255,255,255,.12); --fcui-hi:rgba(255,255,255,.08);
+  --fcui-bub:rgba(255,255,255,.10); --fcui-bar:rgba(255,255,255,.12);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --fcv-g:linear-gradient(155deg,#02708F 0%,#03599C 42%,#07417E 100%);
+  --fcb-g:linear-gradient(155deg,#1E5FA8 0%,#093C74 48%,#0B4A94 100%);
+  --fcp-g:linear-gradient(155deg,#1B62B4 0%,#0A4C94 46%,#08386F 100%);
+  --fcui-bg:#0E2136; --fcui-ink:#EAF2FF; --fcui-mut:#8FA6C6;
+  --fcui-row:rgba(255,255,255,.07); --fcui-ring:rgba(255,255,255,.12); --fcui-hi:rgba(255,255,255,.08);
+  --fcui-bub:rgba(255,255,255,.10); --fcui-bar:rgba(255,255,255,.12);
+}}
+
+/* ============================================================
+   Gradient-filled feature cards — white UI panel sits on colour
+   ============================================================ */
+.fc-c{color:#fff}
+.fc-c .t-h3{color:#fff}
+.fc-c .t-body{color:rgba(255,255,255,.86)}
+.fc-c .fc-ui{background:var(--fcui-bg);box-shadow:0 2px 6px rgba(12,10,40,.14), 0 16px 34px -12px rgba(12,10,40,.34);
+  color:var(--fcui-ink)}
+/* inner mini-UI keeps its normal light styling on the white panel */
+.fc-c .fc-ui .mk,.fc-c .fc-ui .mv{color:var(--fcui-ink)}
+.fc-c .fc-ui .mmut{color:var(--fcui-mut)}
+.fc-c .fc-ui .mrow{background:var(--fcui-row);box-shadow:0 0 0 1px var(--fcui-ring), inset 0 1px 0 var(--fcui-hi)}
+.fc-c .fc-ui .mtl-r{color:var(--fcui-mut)}
+.fc-c .fc-ui .mtl-r.now{color:var(--fcui-ink)}
+.fc-c .fc-ui .mtl-d{background:var(--fcui-bg);box-shadow:0 0 0 2px var(--fcui-ring)}
+.fc-c .fc-ui .mtl-r.ok .mtl-d{background:#0F9D58;box-shadow:0 0 0 2px #0F9D58}
+.fc-c .fc-ui .mtl-r.now .mtl-d{background:#0077EE;box-shadow:0 0 0 2px #0077EE, 0 0 0 5px #E8F3FE}
+.fc-c .fc-ui .mbars i{background:var(--fcui-bar);box-shadow:none}
+.fc-c .fc-ui .mbars i.hi{background:linear-gradient(180deg,#2E93FF,#0069D8)}
+.fc-c .fc-ui .mbub.them{background:var(--fcui-bub);color:var(--fcui-ink);box-shadow:none}
+.fc-c .fc-ui .mbub.us{background:linear-gradient(180deg,#2E93FF,#0069D8);color:#fff}
+.fc-c .fc-ui .chip-xs{background:var(--fcui-row);color:var(--fcui-mut);box-shadow:0 0 0 1px var(--fcui-ring)}
+.fc-c .fc-ui .chip-xs.v{background:#E8F3FE;color:#0061CC;box-shadow:none}
+.fc-c .fc-ui .chip-xs.g{background:#E6F6EE;color:#0F9D58;box-shadow:none}
+.fc-c .fc-ui .chip-xs.a{background:#FDF1E3;color:#D97706;box-shadow:none}
+
+/* colour variants */
+.fc-v{background:var(--fcv-g);
+  box-shadow:inset 0 1px 0 var(--fc-hi-g), 0 2px 6px rgba(0,130,210,.28),
+             0 18px 40px -14px rgba(0,130,210,.55)}
+.fc-v:hover{box-shadow:inset 0 1px 0 var(--fc-hi-g2), 0 4px 10px rgba(0,130,210,.3),
+             0 26px 54px -16px rgba(0,130,210,.62)}
+.fc-b{background:var(--fcb-g);
+  box-shadow:inset 0 1px 0 var(--fc-hi-g), 0 2px 6px rgba(0,95,200,.26),
+             0 18px 40px -14px rgba(0,95,200,.55)}
+.fc-b:hover{box-shadow:inset 0 1px 0 var(--fc-hi-g2), 0 4px 10px rgba(0,95,200,.3),
+             0 26px 54px -16px rgba(0,95,200,.62)}
+.fc-p{background:var(--fcp-g);
+  box-shadow:inset 0 1px 0 var(--fc-hi-g), var(--e-brand)}
+
+/* soft tinted variants — dark text, coloured ground */
+.fc-sky{background:linear-gradient(170deg,#E9F4FF 0%,#DAEDFD 100%);
+  box-shadow:0 0 0 1px rgba(0,180,240,.16), inset 0 1px 0 var(--fc-hi-t), var(--e1)}
+.fc-sky:hover{box-shadow:0 0 0 1px rgba(0,180,240,.3), inset 0 1px 0 var(--fc-hi-t), var(--e3)}
+.fc-lav{background:linear-gradient(170deg,#E6F6FE 0%,#D8EFFB 100%);
+  box-shadow:0 0 0 1px rgba(0,119,238,.16), inset 0 1px 0 var(--fc-hi-t), var(--e1)}
+.fc-lav:hover{box-shadow:0 0 0 1px rgba(0,119,238,.3), inset 0 1px 0 var(--fc-hi-t), var(--e3)}
+.fc-mint{background:linear-gradient(170deg,#EAF8F1 0%,#DEF3E8 100%);
+  box-shadow:0 0 0 1px rgba(15,157,88,.16), inset 0 1px 0 var(--fc-hi-t), var(--e1)}
+.fc-mint:hover{box-shadow:0 0 0 1px rgba(15,157,88,.3), inset 0 1px 0 var(--fc-hi-t), var(--e3)}
+:root[data-theme="dark"] .fc-sky{background:linear-gradient(170deg,#08243C 0%,#061C30 100%)}
+:root[data-theme="dark"] .fc-lav{background:linear-gradient(170deg,#062A3E 0%,#051F30 100%)}
+:root[data-theme="dark"] .fc-mint{background:linear-gradient(170deg,#0C2119 0%,#091A14 100%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .fc-sky{background:linear-gradient(170deg,#08243C 0%,#061C30 100%)}
+ :root:not([data-theme="light"]) .fc-lav{background:linear-gradient(170deg,#062A3E 0%,#051F30 100%)}
+ :root:not([data-theme="light"]) .fc-mint{background:linear-gradient(170deg,#0C2119 0%,#091A14 100%)}}
+
+/* tinted cards keep their inner panel white-ish for separation */
+.fc-sky .fc-ui,.fc-lav .fc-ui,.fc-mint .fc-ui{background:var(--surf-1);
+  box-shadow:var(--ring), var(--hi), var(--e2)}
+
+
+/* stat tiles get colour too */
+.st-v{background:var(--surf-brand);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sec-dark .st-v{background:linear-gradient(180deg,#fff,#AFD8FF);-webkit-background-clip:text;background-clip:text}
+.sec-dark .st-l{color:rgba(255,255,255,.7)}
+
+/* footer sits a shade below the canvas */
+.ftr{background:var(--surf-3)}

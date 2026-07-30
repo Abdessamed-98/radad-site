@@ -1,0 +1,76 @@
+/* ============================================================
+   HUB — animated two-way message flow diagram
+   ============================================================ */
+.hubwrap{position:relative;display:flex;flex-direction:column;gap:var(--s5);align-items:center}
+.hub-svg{width:100%;height:auto;display:block;overflow:visible}
+
+/* connector rails */
+.hub-rail{fill:none;stroke:rgba(255,255,255,.15);stroke-width:1.5;
+  stroke-linejoin:round;stroke-linecap:round}
+
+/* travelling packets — one dash chasing along a normalised path */
+.hub-flow{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:11 200}
+.hub-in{stroke:var(--c);stroke-width:4;
+  animation:flowIn var(--dur-cycle,3.4s) linear infinite;animation-delay:var(--d,0s)}
+.hub-out{stroke:#FFFFFF;stroke-width:3;
+  animation:flowOut var(--dur-cycle,3.4s) linear infinite;animation-delay:var(--d,0s)}
+/* dash parked at -100 sits past the path end, at 11 before its start: both invisible */
+@keyframes flowIn{0%{stroke-dashoffset:11}42%,100%{stroke-dashoffset:-100}}
+@keyframes flowOut{0%,54%{stroke-dashoffset:-100}96%,100%{stroke-dashoffset:11}}
+
+/* channel nodes */
+.hub-node .glyph{filter:drop-shadow(0 0 12px var(--c)) drop-shadow(0 3px 8px rgba(0,0,0,.55))}
+.hub-node .halo{fill:var(--c);opacity:.22;
+  animation:halo var(--dur-cycle,3.4s) ease-out infinite;animation-delay:var(--d,0s);
+  transform-box:fill-box;transform-origin:center}
+@keyframes halo{0%{transform:scale(.9);opacity:.5}34%,100%{transform:scale(1.9);opacity:0}}
+.hub-node .lab{fill:rgba(255,255,255,.82);font-family:var(--body);font-size:19px;
+  font-weight:600;text-anchor:middle}
+.hub-node .sub{fill:rgba(255,255,255,.4);font-family:var(--body);font-size:15px;text-anchor:middle}
+
+/* hub core */
+.hub-core circle.disc{fill:#FFFFFF}
+.hub-ring{fill:none;stroke:rgba(150,205,255,.5);stroke-width:1.5;
+  transform-box:fill-box;transform-origin:center;
+  animation:hubring var(--dur-cycle,3.4s) ease-out infinite}
+.hub-ring.r2{animation-delay:.5s}
+.hub-ring.r3{animation-delay:1s}
+@keyframes hubring{0%{transform:scale(1);opacity:.55}75%,100%{transform:scale(2.05);opacity:0}}
+.hub-glow{fill:url(#hubGlow);opacity:.85}
+
+/* latency chip under the hub */
+.hub-chip{fill:rgba(255,255,255,.12);stroke:rgba(255,255,255,.24);stroke-width:1}
+.hub-chip-t{fill:#FFFFFF;font-family:var(--body);font-size:17px;font-weight:600;text-anchor:middle}
+
+
+/* ---- reveal : HubBlock adds .hub-on once a third of the diagram is on
+   screen. The core pops first, then energy radiates OUTWARD: each rail
+   draws itself from the hub toward its node (pathLength=100 dash, offset
+   -100 -> 0 reveals end-to-start), and the node springs in right as its
+   rail arrives, staggered per rail (--rd). Flow pulses and chip wake
+   last. Only properties the infinite animations don't own are touched:
+   the node G is scaled (its halo animates its own transform), and the
+   flows fade via opacity (their animation owns stroke-dashoffset). ---- */
+.hub-core{transform-box:fill-box;transform-origin:center;
+  transition:transform .7s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease)}
+.hub-rail{stroke-dasharray:100;
+  transition:stroke-dashoffset .8s var(--ease-io) calc(.3s + var(--rd,0s))}
+.hub-node{transform-box:fill-box;transform-origin:center;
+  transition:transform .6s cubic-bezier(.34,1.56,.64,1) calc(.85s + var(--rd,0s)),
+             opacity .4s var(--ease) calc(.85s + var(--rd,0s))}
+.hub-flow{transition:opacity .5s var(--ease) 1.45s}
+.hub-chip,.hub-chip-t{transition:opacity .45s var(--ease) 1.5s,
+  translate .45s var(--ease) 1.5s}
+
+.hubwrap:not(.hub-on) .hub-core{transform:scale(.72);opacity:0}
+.hubwrap:not(.hub-on) .hub-rail{stroke-dashoffset:-100}
+.hubwrap:not(.hub-on) .hub-node{transform:scale(.3);opacity:0}
+.hubwrap:not(.hub-on) .hub-flow{opacity:0}
+.hubwrap:not(.hub-on) .hub-chip,
+.hubwrap:not(.hub-on) .hub-chip-t{opacity:0;translate:0 10px}
+
+@media (prefers-reduced-motion:reduce){
+  .hub-in,.hub-out,.hub-ring,.hub-node .halo{animation:none}
+  .hub-in,.hub-out{stroke-dasharray:none;opacity:.55}
+  .hub-node .halo{opacity:.22}
+}

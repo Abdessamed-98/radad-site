@@ -1,0 +1,343 @@
+/* ============ real brand marks ============ */
+/* Wordmark paths are currentColor so the lockup follows the theme;
+   the symbol keeps its own navy face because it sits on its white disc. */
+.logo-lock{height:34px;width:auto;display:block;color:var(--ink)}
+.logo-sym{height:32px;width:auto;display:block;flex:none}
+.brand-t{font-family:var(--disp);font-weight:700;font-size:1.2rem;letter-spacing:-.015em;color:var(--ink)}
+.brand{gap:var(--s2)}
+.ftr .logo-lock{height:38px}
+.ftr .logo-sym{height:36px}
+
+/* the old violet chip is gone — the symbol is self-contained */
+.bmk{width:auto;height:auto;background:none;box-shadow:none;border-radius:0}
+
+@media (max-width:520px){
+  .logo-lock{height:29px}
+  .logo-sym{height:28px}
+  .brand-t{font-size:1.06rem}
+}
+
+/* ============ AI ↔ human handoff : timeline stepper ============
+   A gradient journey line runs through four state-coloured discs;
+   the cards hang beneath. On reveal (.rev-on from <Reveal/>) the
+   line draws itself across, each disc pops as the line reaches it,
+   and its card rises after — reveal rides translate/scale so the
+   hover lift (transform) stays instant. */
+.handoff{position:relative;display:grid;grid-template-columns:repeat(4,1fr);
+  gap:var(--s4);padding-top:66px}
+
+/* the journey line, coloured by the states it passes through */
+.ho-track{position:absolute;top:20px;inset-inline:12.5%;height:3px;border-radius:3px;
+  background:linear-gradient(90deg,var(--brand),var(--amber),var(--mint),var(--ink-4));
+  transform-origin:0 50%;opacity:.9;
+  transition:transform .85s var(--ease-io) .05s}
+:root[dir="rtl"] .ho-track{transform-origin:100% 50%;
+  background:linear-gradient(270deg,var(--brand),var(--amber),var(--mint),var(--ink-4))}
+
+.ho{position:relative;display:flex;flex-direction:column;align-items:center;gap:var(--s2);
+  padding:var(--s6) var(--s4) var(--s5);border-radius:var(--r4);background:var(--surf-1);
+  box-shadow:var(--ring), var(--hi), var(--e2);text-align:center;
+  --hoc:var(--brand);--hot:var(--brand-tint);
+  transition:transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+             translate .6s cubic-bezier(.22,1,.36,1) calc(var(--hod,0s) + .3s),
+             opacity .45s var(--ease) calc(var(--hod,0s) + .3s)}
+/* nth-of-type: the track span is the grid's first child */
+.ho:nth-of-type(2){--hoc:var(--amber);--hot:var(--amber-tint);--hod:.16s}
+.ho:nth-of-type(3){--hoc:var(--mint);--hot:var(--mint-tint);--hod:.32s}
+.ho:nth-of-type(4){--hoc:var(--ink-3);--hot:var(--bg-sunk);--hod:.48s}
+.ho:hover{transform:translateY(-4px);box-shadow:var(--ring-2), var(--hi), var(--e3)}
+.ho>*{position:relative}
+/* faint state-coloured wash down from the card's top */
+.ho::before{content:"";position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(180deg,var(--hot),transparent 58%);opacity:.55}
+
+/* the disc, floating on the line above its card */
+.ho-n{position:absolute;top:-66px;inset-inline:0;margin-inline:auto;
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  font-size:1rem;font-weight:700;color:#fff;background:var(--hoc);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 0 0 6px var(--hot),
+             0 10px 22px -8px var(--hoc);
+  transition:scale .55s cubic-bezier(.34,1.56,.64,1) calc(var(--hod,0s) + .2s)}
+.ho-k{font-size:.9rem;font-weight:700;line-height:1.5}
+.ho .chip-xs{align-self:center}
+
+.handoff:not(.rev-on) .ho-track{transform:scaleX(0)}
+.handoff:not(.rev-on) .ho{translate:0 28px;opacity:0}
+.handoff:not(.rev-on) .ho-n{scale:.2}
+
+/* ============ voice calls (beta) ============ */
+.vo{display:flex;flex-direction:column;gap:var(--s2);padding:var(--s5);
+  border-radius:var(--r3)}
+.vo-k{font-size:.88rem;font-weight:700;font-family:var(--disp)}
+.vo-s{font-size:.78rem;color:var(--ink-3);line-height:1.6}
+
+@media (max-width:900px){
+  /* rows wrap: the line can't bridge them, and the discs need row room */
+  .handoff{grid-template-columns:1fr 1fr;row-gap:70px;padding-top:70px}
+  .ho-track{display:none}
+}
+@media (max-width:620px){
+  .handoff{grid-template-columns:1fr}
+}
+
+/* ============ data sources : illustrated cards ============
+   Reference: illustration-first feature cards. Each card opens with a
+   mini scene of its source (doc + topic chips / data table / live
+   sheet / audit log) tinted by the card's --sc, then title + copy.
+   On reveal (.rev-on from <Reveal/>) the cards rise staggered and
+   each scene assembles: canvas piece rises, chips pop, pill slides.
+   Scene pieces centre with margin-inline:auto so translate/rotate
+   stay free for animation. */
+.srcv{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s4)}
+@media (max-width:1100px){.srcv{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.srcv{grid-template-columns:1fr}}
+
+.src-card{position:relative;display:flex;flex-direction:column;gap:var(--s1);
+  padding:10px 10px 18px;border-radius:var(--r4);
+  background:var(--surf-1);box-shadow:var(--ring), var(--hi), var(--e2);
+  transition:transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+             translate .65s cubic-bezier(.22,1,.36,1) var(--srd,0s),
+             scale .65s cubic-bezier(.22,1,.36,1) var(--srd,0s),
+             opacity .5s var(--ease) var(--srd,0s)}
+.src-card:hover{transform:translateY(-5px);box-shadow:var(--ring-2), var(--hi), var(--e3)}
+.srcv .src-card:nth-child(2){--srd:.13s}
+.srcv .src-card:nth-child(3){--srd:.26s}
+.srcv .src-card:nth-child(4){--srd:.39s}
+.src-k{font-size:.95rem;font-weight:700;line-height:1.5;padding-inline:var(--s3);
+  margin-top:var(--s2)}
+.src-s{font-size:.8rem;color:var(--ink-2);line-height:1.7;padding-inline:var(--s3);
+  padding-bottom:var(--s1)}
+
+/* the scene canvas: tinted wash + dotted paper */
+.srcv-vis{position:relative;height:172px;border-radius:calc(var(--r4) - 4px);
+  overflow:hidden;
+  background:
+    radial-gradient(120% 95% at 50% 0%, color-mix(in srgb, var(--sc) 13%, transparent), transparent 72%),
+    radial-gradient(var(--line-2) 1px, transparent 1.5px),
+    var(--surf-2);
+  background-size:auto, 14px 14px, auto;
+  box-shadow:inset 0 0 0 1px var(--line)}
+
+/* article sheet with text lines */
+.sv-sheet{position:absolute;top:20px;left:0;right:0;margin-inline:auto;width:64%;
+  height:150px;border-radius:12px;background:var(--surf-1);
+  box-shadow:var(--ring), var(--hi), var(--e2);
+  padding:16px 14px;display:flex;flex-direction:column;gap:9px;
+  transition:translate .6s cubic-bezier(.22,1,.36,1) calc(var(--srd,0s) + .18s),
+             opacity .4s var(--ease) calc(var(--srd,0s) + .18s),
+             rotate var(--dur-l) var(--ease)}
+.sv-sheet i{height:7px;border-radius:4px;background:var(--bg-sunk)}
+.sv-sheet i:nth-child(1){width:52%;background:color-mix(in srgb, var(--sc) 45%, var(--bg-sunk))}
+.sv-sheet i:nth-child(2){width:92%}
+.sv-sheet i:nth-child(3){width:78%}
+.sv-sheet i:nth-child(4){width:60%}
+.src-card:hover .sv-sheet{rotate:-1.5deg}
+
+/* floating topic chips */
+.sv-chip{position:absolute;display:inline-flex;align-items:center;gap:5px;
+  font-size:.62rem;font-weight:700;color:var(--ink-2);background:var(--surf-1);
+  padding:.3rem .6rem;border-radius:var(--rf);
+  box-shadow:var(--ring-2), var(--hi), var(--e2);white-space:nowrap;
+  transition:translate var(--dur-l) var(--ease),
+             scale .5s cubic-bezier(.34,1.56,.64,1) calc(var(--srd,0s) + var(--svd,.32s)),
+             opacity .3s var(--ease) calc(var(--srd,0s) + var(--svd,.32s))}
+.sv-chip.c1{top:14px;inset-inline-start:10px;--svd:.32s}
+.sv-chip.c2{top:52%;inset-inline-end:8px;--svd:.42s}
+.sv-chip.c3{bottom:40px;inset-inline-start:14px;--svd:.52s}
+.src-card:hover .sv-chip{translate:0 -2px}
+.sv-chip.live{color:var(--mint)}
+.sv-dot{width:6px;height:6px;border-radius:50%;background:var(--mint);
+  box-shadow:0 0 0 3px var(--mint-tint)}
+
+/* overlapping caption pill, reference-style */
+.sv-pill{position:absolute;bottom:12px;left:0;right:0;margin-inline:auto;
+  width:fit-content;display:inline-flex;align-items:center;gap:6px;
+  font-size:.68rem;font-weight:700;color:var(--ink);background:var(--surf-1);
+  padding:.42rem .75rem;border-radius:var(--rf);white-space:nowrap;
+  box-shadow:var(--ring-2), var(--hi), var(--e3);
+  transition:translate .55s cubic-bezier(.22,1,.36,1) calc(var(--srd,0s) + .45s),
+             opacity .35s var(--ease) calc(var(--srd,0s) + .45s)}
+.sv-pill svg{width:13px;height:13px;flex:none;color:var(--sc)}
+.src-card:hover .sv-pill{translate:0 -3px}
+
+/* mini data table */
+.sv-table{position:absolute;top:22px;left:0;right:0;margin-inline:auto;width:72%;
+  border-radius:10px;overflow:hidden;background:var(--surf-1);
+  box-shadow:var(--ring), var(--e2);
+  transition:translate .6s cubic-bezier(.22,1,.36,1) calc(var(--srd,0s) + .18s),
+             opacity .4s var(--ease) calc(var(--srd,0s) + .18s),
+             rotate var(--dur-l) var(--ease)}
+.src-card:hover .sv-table{rotate:1.5deg}
+.sv-th,.sv-tr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:8px 10px}
+.sv-th{background:color-mix(in srgb, var(--sc) 18%, var(--surf-2))}
+.sv-th i{height:6px;border-radius:3px;background:color-mix(in srgb, var(--sc) 55%, transparent)}
+.sv-tr{box-shadow:0 -1px 0 var(--line)}
+.sv-tr i{height:6px;border-radius:3px;background:var(--bg-sunk)}
+.sv-tr.hl{background:color-mix(in srgb, var(--sc) 9%, transparent)}
+.sv-tr.hl i{background:color-mix(in srgb, var(--sc) 32%, var(--bg-sunk))}
+
+/* audit log rows */
+.sv-log{position:absolute;top:26px;left:0;right:0;margin-inline:auto;width:76%;
+  display:flex;flex-direction:column;gap:9px;
+  transition:translate .6s cubic-bezier(.22,1,.36,1) calc(var(--srd,0s) + .18s),
+             opacity .4s var(--ease) calc(var(--srd,0s) + .18s)}
+.sv-li{display:flex;align-items:center;gap:8px;background:var(--surf-1);
+  border-radius:10px;padding:9px 11px;box-shadow:var(--ring), var(--hi), var(--e1)}
+.sv-li svg{width:12px;height:12px;flex:none}
+.sv-li.ok svg{color:var(--mint)}
+.sv-li.warn svg{color:var(--amber)}
+.sv-li i{height:6px;border-radius:3px;background:var(--bg-sunk);flex:1}
+.sv-li:nth-child(2) i{flex:.7}
+.sv-li:nth-child(3) i{flex:.85}
+
+/* reveal states */
+.srcv:not(.rev-on) .src-card{translate:0 34px;scale:.94;opacity:0}
+.srcv:not(.rev-on) .sv-sheet,
+.srcv:not(.rev-on) .sv-table,
+.srcv:not(.rev-on) .sv-log{translate:0 18px;opacity:0}
+.srcv:not(.rev-on) .sv-chip{scale:.4;opacity:0}
+.srcv:not(.rev-on) .sv-pill{translate:0 14px;opacity:0}
+
+/* ============ WhatsApp voice mockup ============ */
+/* Feature checklist that replaced the 2x2 cards */
+.vo-list{display:flex;flex-direction:column;gap:var(--s3)}
+.vo-li{display:flex;align-items:flex-start;gap:var(--s3)}
+.vo-li .vo-k{font-size:.88rem}
+.vo-li .vo-s{font-size:.76rem}
+
+/* ---- phone bezel: sleeker, with a speaker island ---- */
+.vphone{position:relative;justify-self:center;width:min(310px,100%);
+  border-radius:42px;padding:10px;background:#0B1526;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),
+             inset 0 0 0 1.5px rgba(255,255,255,.06), var(--e4)}
+.vphone::before{content:"";position:absolute;top:20px;left:50%;translate:-50%;
+  width:84px;height:20px;border-radius:999px;background:#0B1526;z-index:2}
+
+/* ---- the in-call screen ---- */
+.vcall{border-radius:34px;overflow:hidden;display:flex;flex-direction:column;
+  align-items:center;gap:14px;padding:64px 22px 26px;min-height:560px;
+  color:#EAF2FF;text-align:center;
+  background:radial-gradient(120% 70% at 50% 0%, #0E3B74 0%, #082347 48%, #051225 100%)}
+.vc-chip{display:inline-flex;align-items:center;gap:6px;font-size:.68rem;font-weight:700;
+  color:#BFE0FF;background:rgba(120,190,255,.14);padding:.35rem .75rem;border-radius:999px;
+  box-shadow:inset 0 0 0 1px rgba(140,200,255,.25)}
+.vc-chip svg{width:12px;height:12px}
+
+/* pulsing rings say "live call" — transform/opacity only */
+.vc-avwrap{position:relative;width:112px;height:112px;display:grid;place-items:center;margin-top:6px}
+.vc-pulse{position:absolute;inset:0;border-radius:50%;
+  border:1.5px solid rgba(120,190,255,.55);animation:vcPulse 2.6s ease-out infinite}
+.vc-pulse.p2{animation-delay:-1.3s}
+@keyframes vcPulse{0%{transform:scale(.75);opacity:.9}80%,100%{transform:scale(1.5);opacity:0}}
+.vc-av{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(160deg,#2E93FF,#0057C8);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 14px 34px -10px rgba(0,80,190,.7)}
+.vc-av svg{width:38px;height:38px}
+.vc-name{font-family:var(--disp);font-size:1.3rem;font-weight:700}
+.vc-dur{font-size:.85rem;color:#9CC4F5;letter-spacing:.06em;margin-top:-6px}
+
+/* the agent speaking */
+.vc-wave{display:flex;align-items:center;gap:3px;height:26px;margin-top:2px}
+.vc-wave i{width:3px;border-radius:2px;background:#5AB1FF;
+  animation:vcBar 1.15s ease-in-out infinite}
+@keyframes vcBar{0%,100%{transform:scaleY(.55)}50%{transform:scaleY(1.25)}}
+
+/* live transcript */
+.vc-cap{display:flex;flex-direction:column;gap:6px;font-size:.76rem;line-height:1.7;
+  color:#D7E8FF;background:rgba(255,255,255,.07);border-radius:14px;
+  padding:.7rem .85rem;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);text-align:start}
+.vc-cap-l{display:inline-flex;align-items:center;gap:5px;font-size:.62rem;font-weight:700;
+  color:#8FC5FF}
+.vc-cap-l svg{width:11px;height:11px}
+
+/* the escalation the product actually offers */
+.vc-esc{display:inline-flex;align-items:center;gap:7px;font-size:.74rem;font-weight:700;
+  color:#EAF2FF;background:rgba(255,255,255,.10);padding:.5rem 1rem;border-radius:999px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.vc-esc svg{width:14px;height:14px}
+
+/* call controls */
+.vc-ctrl{display:flex;align-items:center;gap:18px;margin-top:auto}
+.vc-btn{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;
+  color:#EAF2FF;background:rgba(255,255,255,.12);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)}
+.vc-btn svg{width:20px;height:20px}
+.vc-btn.end{background:linear-gradient(160deg,#FF5F57,#D3382E);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 10px 24px -8px rgba(220,60,50,.6)}
+.vc-btn.end svg{transform:rotate(135deg)}
+
+@media (max-width:900px){ .vphone{width:min(290px,100%)} }
+
+/* ============ features zoom-out scrub ============ */
+/* --zp: 0 = headline huge, cards hidden; 1 = settled layout. Defaults to 1
+   so no-JS and reduced-motion get the finished section. The JS drives it
+   from scroll position. Headline shrinks over the first 55% of the scrub,
+   cards enter over the last 65% — the overlap makes it feel like one move. */
+/* Pinned scrub. The frame is TOP-ANCHORED below the fixed navbar — the old
+   version centered its content, which shoved the headline underneath the
+   navbar on ordinary viewports and read as broken. Here the settled layout
+   (headline top, cards under it) is the frame's real layout; at p=0 the
+   headline is merely translated down to centre stage over the white frame,
+   with the cards faded out beneath it. */
+.fz{position:relative;height:200vh;--zp:1}
+/* min-height + visible overflow, NOT a hard 100vh crop: if headline+grid run
+   a little taller than the viewport, the tail simply scrolls into view after
+   the pin releases instead of being clipped forever. This is what lets the
+   scrub run on ordinary laptop heights with no static fallback. */
+.fz-stick{position:sticky;top:0;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  padding-top:calc(var(--nav-h) + 3vh);
+  gap:clamp(1.2rem,3vh,2rem);
+  --hp:min(1, calc(var(--zp) / .55));                    /* headline phase */
+  --cp:clamp(0, calc((var(--zp) - .3) / .7), 1)}         /* cards phase */
+/* Lines never wrap (nowrap blocks), so the scaled width is known: line-width
+   x 1.6 stays inside the wrap — that, not overflow, prevents clipping. */
+.fz-head{text-align:center;line-height:1.25;
+  transform:translateY(calc((1 - var(--hp)) * 30vh))
+            scale(calc(1.6 - .6 * var(--hp)));
+  transform-origin:50% 0}
+.fz-head span{display:block;white-space:nowrap}
+.fz-cards{width:100%;
+  opacity:var(--cp);
+  transform:translateY(calc((1 - var(--cp)) * 12vh))
+            scale(calc(.94 + .06 * var(--cp)))}
+
+/* phones only: no pin, settled static section */
+@media (max-width:700px){
+  .fz{height:auto}
+  .fz-stick{position:static;min-height:0;padding-top:0}
+  .fz-head,.fz-cards{transform:none;opacity:1}
+  .fz-head span{white-space:normal}
+}
+@media (prefers-reduced-motion:reduce){
+  .fz{height:auto}
+  .fz-stick{position:static;min-height:0;padding-top:0}
+  .fz-head,.fz-cards{transform:none;opacity:1}
+  .fz-head span{white-space:normal}
+}
+
+/* ============ stats reveal: count big, then FLY into the cards ============
+   Two layers. The cards are plain settled markup, never transformed and
+   never rewritten — the end state cannot lose content by construction.
+   The overlay (.statz-big) mirrors the grid with one giant counter centered
+   over each hidden card; after counting, JS measures each counter and its
+   card value (FLIP) and flies it into that exact spot, shrinking en route.
+   The card's own value stays hidden until touchdown and takes over in place.
+   States: (none)=settled · .pre=overlay only · .fly=in flight · .done */
+.statz{position:relative}
+.statz .st{transition:opacity .45s var(--ease) .1s}
+.statz.pre .st{opacity:0;transition:none}
+/* boxes/icons/labels fade in during the flight; the value waits for landing */
+.statz.pre .st .st-v,
+.statz.fly .st .st-v{opacity:0;transition:none}
+.statz.done .st .st-v{opacity:1;transition:opacity .16s var(--ease)}
+
+.statz-big{position:absolute;inset:0;pointer-events:none;
+  opacity:0;visibility:hidden}
+.statz.pre .statz-big,
+.statz.fly .statz-big{opacity:1;visibility:visible}
+.statz.done .statz-big{opacity:0;visibility:hidden;
+  transition:opacity .16s var(--ease), visibility 0s .16s}
+.statz-cell{display:flex;align-items:center;justify-content:center}
+.statz-n{font-family:var(--disp);font-weight:700;line-height:1;
+  font-size:clamp(3rem,4.6vw,4.4rem);will-change:transform}
