@@ -225,7 +225,8 @@ export function PlansBlock({ locale }: { locale: Locale }) {
             </div>
           ) : (
             <div className="pl-pr">
-              <span className="pl-c">$</span>
+              {/* PlanSeeder prices are SAR, not dollars */}
+              <span className="pl-c">{p(["ر.س", "SAR"])}</span>
               <span className="pl-a num">{p(pl.a)}</span>
               <span className="pl-per">{t("p_month")}</span>
             </div>

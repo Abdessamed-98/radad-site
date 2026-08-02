@@ -571,4 +571,8 @@
   .grid3,.grid2,.slots,.faq,.form{grid-template-columns:1fr}
   .fpill{display:none}
   }
+/* plan cards carry too much content for half-width columns on phones */
+@media (max-width:560px){
+  .grid4{grid-template-columns:1fr}
+  }
 
