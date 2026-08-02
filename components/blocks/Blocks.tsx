@@ -99,19 +99,105 @@ export function StatsBlock({ locale }: { locale: Locale }) {
   );
 }
 
-/* ---------- onboarding steps ---------- */
+/* ---------- onboarding steps ----------
+   A journey rail: the connecting line draws itself across the section,
+   each numbered station pops as the line reaches it, and every card
+   opens with a small CSS-drawn scene of what actually happens at that
+   step — channels clicking into the store, the knowledge base filling,
+   the first supervised conversation. Copy is the verbatim STEPS
+   content; scene labels reuse the product's own phrases. */
 export function StepsBlock({ locale }: { locale: Locale }) {
   const p = getP(locale);
+  const chip = (name: string, cls: string) => {
+    const b = BRANDS.find((x) => x.name === name)!;
+    return (
+      <span className={`sc-chip ${cls}`}>
+        <svg viewBox="0 0 24 24" fill="currentColor" dangerouslySetInnerHTML={{ __html: b.svg }} />
+      </span>
+    );
+  };
+
+  const scenes = [
+    /* 1 — channels click into the store */
+    <span className="sc sc1" key="c">
+      <span className="sc1-chips">
+        {chip("WhatsApp", "wa")}
+        {chip("Salla", "salla")}
+        {chip("Zid", "zid")}
+      </span>
+      <span className="sc1-wire" />
+      <span className="sc1-hub">
+        <Icon name="store" width={2} />
+        {p(["متجرك", "Your store"])}
+        <span className="sc-ok">
+          <Icon name="check" width={3.2} />
+        </span>
+      </span>
+    </span>,
+
+    /* 2 — the knowledge base fills itself */
+    <span className="sc sc2" key="t">
+      <span className="sc2-doc">
+        <i />
+        <i />
+        <i />
+      </span>
+      <span className="sc2-flow">
+        <i />
+        <i />
+        <i />
+      </span>
+      <span className="sc2-bot">
+        <Icon name="spark" width={2} />
+      </span>
+      <span className="sc2-foot">
+        <span className="sc2-bar">
+          <i />
+        </span>
+        <span className="sc2-lbl">{p(["قاعدة المعرفة · جاهزة", "Knowledge base · ready"])}</span>
+      </span>
+    </span>,
+
+    /* 3 — the first supervised conversation */
+    <span className="sc sc3" key="w">
+      <span className="sc3-row">
+        <span className="sc3-av">ن</span>
+        <span className="sc3-lines">
+          <i />
+          <i />
+        </span>
+        <span className="sc3-live">
+          <i />
+          {p(["يرد الآن", "Replying now"])}
+        </span>
+      </span>
+      <span className="sc3-take">{p(["استلام المحادثة", "Take over"])}</span>
+    </span>,
+  ];
+
   return (
-    <div className="steplist">
+    <div className="stp rv">
+      <span className="stp-rail" aria-hidden="true">
+        <i />
+      </span>
       {STEPS.map((s, i) => (
-        <div className={`surface lift sp rv d${i + 1}`} key={i}>
-          <span className="sp-n num">0{i + 1}</span>
-          <span style={{ display: "flex", flexDirection: "column" }}>
+        <div
+          className="stq"
+          key={i}
+          style={{ "--sd": `${0.3 + i * 0.24}s` } as React.CSSProperties}
+        >
+          <span className="stq-disc num">0{i + 1}</span>
+          <div className="stq-card surface">
+            <span className="stq-vis" aria-hidden="true">
+              {scenes[i]}
+            </span>
             <span className="t-h3">{p(s.t)}</span>
             <span className="t-body">{p(s.d)}</span>
-            <span className="sp-m">{p(s.m)}</span>
-          </span>
+            <span className="stq-m">
+              <Icon name="clock" width={2.2} />
+              {p(s.m)}
+            </span>
+          </div>
         </div>
       ))}
     </div>
