@@ -184,9 +184,14 @@ const VOICE: [IconName, DictKey, DictKey][] = [
 
 export function VoiceBlock({ locale }: { locale: Locale }) {
   const t = getT(locale);
+  const p = getP(locale);
   return (
-    <div className="orb-two">
-      <div className="orb-copy stack g4 rv">
+    /* .vz choreographs the reveal: the phone starts centred and ringing
+       (incoming-call overlay, buzz), the call is "answered" ~1.5s in —
+       overlay fades to the in-call screen, the phone eases to its column,
+       and the copy staggers out from the middle. CSS-only timeline. */
+    <div className="orb-two vz rv">
+      <div className="orb-copy stack g4">
         <span className="badge badge-glass" style={{ alignSelf: "flex-start" }}>
           <i />
           {t("vo_badge")}
@@ -221,8 +226,23 @@ export function VoiceBlock({ locale }: { locale: Locale }) {
           phone shows one: pulsing avatar, live timer, the agent speaking
           (waveform), a live transcript, and real call controls including
           the escalation the product actually offers. */}
-      <div className="vphone rv d1" aria-hidden="true">
+      <div className="vphone" aria-hidden="true">
         <div className="vcall">
+          {/* incoming-call face; fades away at the answer moment */}
+          <span className="vc-inc">
+            <span className="vc-inc-t">{p(["مكالمة واردة", "Incoming call"])}</span>
+            <span className="vc-inc-av">ن</span>
+            <span className="vc-inc-n">{p(["نورة السالم", "Noura AlSalem"])}</span>
+            <span className="vc-inc-num num">+966 50 000 0000</span>
+            <span className="vc-inc-btns">
+              <span className="vc-btn end">
+                <Icon name="phone" width={2} />
+              </span>
+              <span className="vc-btn answer">
+                <Icon name="phone" width={2} />
+              </span>
+            </span>
+          </span>
           <span className="vc-chip">
             <Icon name="spark" width={2.2} />
             {t("vc_status")}

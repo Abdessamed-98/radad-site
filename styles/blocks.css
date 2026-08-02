@@ -341,3 +341,70 @@
 .statz-cell{display:flex;align-items:center;justify-content:center}
 .statz-n{font-family:var(--disp);font-weight:700;line-height:1;
   font-size:clamp(3rem,4.6vw,4.4rem);will-change:transform}
+
+/* ============ voice section: incoming-call reveal ============
+   Timeline (starts when .in lands, all CSS animation-delay):
+   0s     phone centred over the section, buzzing, incoming-call face up
+   1.5s   the store "answers": face fades to the in-call screen, the
+          phone eases to its column, the copy staggers out from the
+          middle — everything ease-out, transform/opacity only. */
+.vz{--sx:-1;container-type:inline-size}
+:root[dir="rtl"] .vz{--sx:1}
+/* wrapper keeps the reveal fade; the choreography provides the motion */
+.vz.rv{transform:none}
+.vz .vcall{position:relative}
+
+/* phone: held at the section's middle, ringing, then slides home */
+.vz.in .vphone{
+  animation:
+    vzBuzz .14s linear 10,
+    vzHome .8s cubic-bezier(.16,.8,.3,1) 1.5s both}
+@keyframes vzBuzz{0%,100%{rotate:0deg}25%{rotate:1.2deg}75%{rotate:-1.2deg}}
+@keyframes vzHome{
+  from{translate:calc(var(--sx) * 26.5cqi) 0}
+  to{translate:0 0}}
+
+/* incoming-call face */
+.vc-inc{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:7px;
+  background:radial-gradient(120% 70% at 50% 0%, #0E3B74 0%, #082347 48%, #051225 100%)}
+.vc-inc-t{font-size:.72rem;font-weight:700;color:#9FC5EF;letter-spacing:.06em}
+.vc-inc-av{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(160deg,#2E93FF,#0061CC);color:#fff;
+  font-size:1.6rem;font-weight:800;margin-top:10px}
+.vc-inc-n{font-size:1.15rem;font-weight:800;color:#EAF2FF;margin-top:6px}
+.vc-inc-num{font-size:.74rem;color:#7FA3CC}
+.vc-inc-btns{display:flex;gap:38px;margin-top:26px}
+.vc-btn.answer{background:linear-gradient(160deg,#37D06A,#149A46);color:#fff;
+  box-shadow:0 10px 26px -10px rgba(30,190,90,.65);
+  animation:vzRing 1.1s ease-in-out infinite}
+@keyframes vzRing{0%,100%{scale:1}50%{scale:1.14}}
+/* the answer: face fades out, in-call screen is already underneath */
+.vz.in .vc-inc{animation:vzAns .4s ease 1.5s both}
+@keyframes vzAns{from{opacity:1}to{opacity:0;visibility:hidden}}
+
+/* copy: staggers out from the middle once the call is answered */
+.vz.in .orb-copy > *{animation:vzCopy .6s cubic-bezier(.16,.8,.3,1) both}
+@keyframes vzCopy{
+  from{opacity:0;translate:calc(var(--sx) * -72px) 0}
+  to{opacity:1;translate:0 0}}
+.vz.in .orb-copy > :nth-child(1){animation-delay:1.55s}
+.vz.in .orb-copy > :nth-child(2){animation-delay:1.63s}
+.vz.in .orb-copy > :nth-child(3){animation-delay:1.71s}
+.vz.in .orb-copy > :nth-child(4){animation-delay:1.79s}
+.vz.in .orb-copy > :nth-child(5){animation-delay:1.87s}
+
+@media (prefers-reduced-motion:reduce){
+  .vz.in .vphone,.vz.in .vc-inc,.vz.in .orb-copy > *,.vc-btn.answer{animation:none}
+  .vc-inc{display:none}
+}
+/* stacked layout: no room for the centre-stage opening — settle directly */
+@media (max-width:900px){
+  .vz.in .vphone{animation:vzBuzz .14s linear 10}
+  .vz.in .orb-copy > *{animation-delay:.1s}
+  .vz.in .orb-copy > :nth-child(2){animation-delay:.18s}
+  .vz.in .orb-copy > :nth-child(3){animation-delay:.26s}
+  .vz.in .orb-copy > :nth-child(4){animation-delay:.34s}
+  .vz.in .orb-copy > :nth-child(5){animation-delay:.42s}
+  .vz.in .vc-inc{animation-delay:1.5s}
+}
