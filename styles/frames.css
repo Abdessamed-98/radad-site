@@ -1,0 +1,281 @@
+/* ============================================================
+   HALF-FRAME PRODUCT SHOTS — copy on one side, a cropped .awin
+   replica on the other, anchored to the viewport edge so the
+   rest of the page visibly "continues" off-screen.
+
+   Geometry: .fr-crop reserves the row height; the frame itself
+   is absolutely positioned inside it, pinned to the column edge
+   that faces the copy, and given a width larger than the column
+   so it overflows toward the viewport edge. body{overflow-x:
+   hidden} (tokens.css) is what crops it — no masks, no clips
+   of our own, so shadows stay whole up to the edge.
+
+   .fr-two        copy | frame   → frame bleeds off the inline-END edge
+   .fr-two.flip   frame | copy   → frame bleeds off the inline-START edge
+   Both are logical, so ar/en mirror for free.
+   ============================================================ */
+.fr-two{display:grid;grid-template-columns:1fr 1fr;gap:var(--s8);align-items:center}
+.fr-copy{min-width:0}
+.fr-copy .t-lead{max-width:46ch}
+.fr-dot{height:22px;width:22px;border-radius:8px;flex-shrink:0;display:grid;
+  place-items:center;background:var(--brand-tint);color:var(--brand);margin-top:2px}
+.fr-dot svg{width:13px;height:13px}
+.sec-dark .fr-dot{background:rgba(255,255,255,.14);color:#fff}
+
+.fr-crop{position:relative;min-width:0}
+.fr-crop.au{min-height:540px}
+.fr-crop.mo{min-height:470px}
+.fr-frame{position:absolute;inset-inline-start:0;top:50%;translate:0 -50%;
+  border-radius:var(--r5);border:1px solid var(--line);
+  box-shadow:0 30px 70px -40px rgba(0,0,0,.45)}
+.fr-two.flip .fr-frame{inset-inline-start:auto;inset-inline-end:0}
+
+/* ============ automations: abandoned-cart studio ============ */
+.au-frame{width:900px;padding:20px;display:flex;flex-direction:column;gap:14px}
+
+.au-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
+  padding-bottom:12px;border-bottom:1px solid var(--line)}
+.au-t{font-weight:800;font-size:16px}
+.au-d{font-size:11.5px;color:var(--muted);margin-top:2px}
+
+/* the product's toggle switch */
+.au-switch{position:relative;display:inline-block;height:24px;width:42px;flex-shrink:0;
+  border-radius:999px;background:var(--accent)}
+.au-switch::after{content:"";position:absolute;top:3px;inset-inline-end:3px;height:18px;
+  width:18px;border-radius:50%;background:#fff}
+.au-switch.sm{height:20px;width:34px}
+.au-switch.sm::after{height:14px;width:14px}
+
+/* journey strip: event → wait → send (kept inside the visible zone) */
+.au-journey{display:flex;align-items:stretch;gap:8px;width:560px;flex-shrink:0}
+.jnode{flex:1;border:1.5px solid var(--line);border-radius:13px;background:var(--card);
+  padding:11px 12px;min-width:0}
+.jnode.send{border-color:color-mix(in srgb,var(--accent) 40%,var(--line));
+  background:var(--accent-soft)}
+.jnode.send .jt{color:var(--accent)}
+.jt{font-size:9.5px;font-weight:800;color:var(--faint);letter-spacing:.04em;
+  margin-bottom:7px}
+.jic{height:30px;width:30px;border-radius:10px;display:grid;place-items:center;
+  margin-bottom:7px}
+.jic svg{width:15px;height:15px}
+.jic.warn{background:var(--warn-soft);color:var(--warn)}
+.jic.mute{background:var(--bg-soft);color:var(--muted)}
+.jic.wa{background:rgba(37,211,102,.14);color:#1faa55}
+.jk{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.js{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.5}
+.jconn{align-self:center;color:var(--faint);flex-shrink:0}
+.jconn svg{width:14px;height:14px;display:block}
+/* the strip reads with the text direction; the glyph points along it */
+:root[dir="rtl"] .jconn svg{transform:scaleX(-1)}
+
+.au-row{display:flex;gap:16px;align-items:flex-start}
+
+/* WhatsApp live preview — the studio's aside, verbatim in spirit */
+.au-side{width:300px;flex-shrink:0}
+.wa-prev{border-radius:16px;overflow:hidden;border:1px solid var(--line);
+  box-shadow:0 16px 40px -28px rgba(0,0,0,.5)}
+.wa-top{display:flex;align-items:center;gap:9px;padding:10px 12px;
+  background:#008069;color:#fff}
+.wa-av{height:30px;width:30px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.22);font-size:13px;font-weight:700;flex-shrink:0}
+.wa-nm{font-size:12.5px;font-weight:700}
+.wa-via{font-size:9.5px;opacity:.85}
+.wa-body{padding:14px 12px 18px;background:#e7ded4}
+:root[data-theme="dark"] .wa-body{background:#0b141a}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .wa-body{background:#0b141a}
+}
+.wa-msg{position:relative;background:#fff;color:#111;border-radius:10px;
+  border-start-start-radius:2px;padding:9px 11px 20px;font-size:11.5px;
+  line-height:1.7;white-space:pre-line;box-shadow:0 1px 1px rgba(0,0,0,.12);
+  overflow-wrap:break-word}
+:root[data-theme="dark"] .wa-msg{background:#1f2c34;color:#e9edef}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .wa-msg{background:#1f2c34;color:#e9edef}
+}
+.wa-time{position:absolute;inset-block-end:5px;inset-inline-end:9px;font-size:9px;
+  color:#8696a0}
+.wa-note{text-align:center;font-size:10.5px;color:var(--muted);margin-top:10px}
+
+/* the editor card — mostly cropped off-screen; enough detail to read as real */
+.au-editor{flex:1;border:1px solid var(--line);border-radius:16px;background:var(--card);
+  padding:16px;min-width:420px}
+.au-lbl{font-size:10.5px;font-weight:700;color:var(--ink-2);margin-bottom:6px}
+.au-f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.au-input{display:flex;align-items:center;justify-content:space-between;gap:6px;
+  border:1px solid var(--line);border-radius:10px;background:var(--bg-soft);
+  padding:.45rem .6rem;font-size:11px;color:var(--ink-2);white-space:nowrap;
+  overflow:hidden}
+.au-input svg{width:12px;height:12px;color:var(--faint);flex-shrink:0}
+.au-input.sm{padding:.3rem .5rem;font-size:10.5px}
+.au-area{display:block;border:1px solid var(--line);border-radius:10px;
+  background:var(--bg-soft);padding:.6rem .7rem;font-size:10.5px;line-height:1.8;
+  color:var(--muted);white-space:pre-line;margin-bottom:10px}
+.au-chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.au-chip{font-size:9.5px;font-weight:700;color:var(--muted);background:var(--bg-soft);
+  border:1px solid var(--line);border-radius:999px;padding:.18rem .5rem}
+.au-bh{display:flex;align-items:center;gap:8px;border:1px solid var(--line);
+  border-radius:12px;background:var(--bg-soft);padding:9px 11px;margin-bottom:14px}
+.au-bh .au-switch{margin-inline-start:auto}
+.au-bh .au-input{background:var(--card)}
+.au-save{display:inline-flex;align-items:center;border-radius:11px;
+  background:var(--accent);color:#fff;font-size:11.5px;font-weight:700;
+  padding:.5rem .9rem}
+
+/* ============ the merchant's morning: dashboard home ============ */
+.mo-frame{width:660px;padding:22px;display:flex;flex-direction:column;gap:18px;
+  background:var(--bg)}
+
+.mo-head{display:flex;flex-wrap:wrap-reverse;align-items:flex-end;justify-content:space-between;gap:14px}
+/* DOM puts the range picker first (deep side of the crop); visual order in the
+   row follows DOM, so the greeting ends up nearest the visible edge */
+.mo-date{font-size:11px;color:var(--muted)}
+.mo-greet{font-size:24px;font-weight:800;line-height:1.25;margin-top:2px}
+.mo-gs{font-size:12px;color:var(--muted);margin-top:2px}
+.mo-range{display:flex;align-items:center;gap:4px;background:var(--card);
+  border:1px solid var(--line);border-radius:13px;padding:5px;font-size:11.5px;
+  flex-shrink:0;box-shadow:var(--shadow)}
+.mo-range span{padding:.35rem .8rem;border-radius:9px;color:var(--muted);
+  white-space:nowrap}
+.mo-range .on{background:var(--accent);color:#fff;font-weight:700}
+
+.mo-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.mo-card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:16px;box-shadow:var(--shadow)}
+.mo-cr{display:flex;align-items:center;justify-content:space-between}
+.mo-ic{height:38px;width:38px;border-radius:12px;display:grid;place-items:center}
+.mo-ic svg{width:18px;height:18px}
+.mo-card.accent .mo-ic{background:var(--accent-soft);color:var(--accent)}
+.mo-card.violet .mo-ic{background:#efe9ff;color:#7c5cff}
+:root[data-theme="dark"] .mo-card.violet .mo-ic{background:rgba(124,92,255,.18)}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .mo-card.violet .mo-ic{background:rgba(124,92,255,.18)}
+}
+.mo-card.warn .mo-ic{background:var(--warn-soft);color:var(--warn)}
+.mo-card.ok .mo-ic{background:var(--ok-soft);color:var(--ok)}
+.mo-pill{font-size:10px;font-weight:800;color:var(--accent);
+  background:var(--accent-soft);border-radius:999px;padding:.15rem .5rem}
+.mo-v{font-size:27px;font-weight:800;margin-top:11px;line-height:1}
+.mo-k{font-size:11.5px;color:var(--muted);margin-top:4px}
+.mo-spark{width:100%;margin-top:9px;display:block}
+.mo-card.accent .mo-spark path{stroke:var(--accent)}
+.mo-card.violet .mo-spark path{stroke:#7c5cff}
+.mo-card.warn .mo-spark path{stroke:var(--warn)}
+.mo-card.ok .mo-spark path{stroke:var(--ok)}
+
+/* ============ assemble-on-reveal ============
+   One-shot: the site's RevealOnScroll observer adds .in when the frame
+   enters the viewport, flipping --fp 0 → 1. Every piece derives its
+   scattered pose from --fp via calc, and a staggered transition carries
+   it home — translate/rotate/scale/opacity only. --sx mirrors the
+   horizontal travel for RTL. Reduced motion gets the settled frame. */
+.fscrub{--fp:0;--sx:-1}
+:root[dir="rtl"] .fscrub{--sx:1}
+.fscrub.in{--fp:1}
+@media (prefers-reduced-motion:reduce){
+  .fscrub{--fp:1}
+  .fscrub .fr-frame{scale:1}
+}
+/* the wrapper keeps the reveal fade but drops the 18px rise —
+   the pieces provide the motion */
+.fscrub.rv{transform:none}
+
+/* the container itself expands into place, growing from the edge that
+   faces the copy toward the viewport edge; the pieces assemble inside
+   it while it grows. scale composes with the -50% translate because
+   they are independent properties. */
+.fscrub .fr-frame{scale:.88;
+  transition:scale .8s cubic-bezier(.2,.7,.2,1)}
+.fscrub.in .fr-frame{scale:1}
+/* growth anchor = the side facing the copy (the visible side) */
+.fr-two .fr-frame{transform-origin:0% 50%}
+:root[dir="rtl"] .fr-two .fr-frame{transform-origin:100% 50%}
+.fr-two.flip .fr-frame{transform-origin:100% 50%}
+:root[dir="rtl"] .fr-two.flip .fr-frame{transform-origin:0% 50%}
+
+.fscrub .au-head,.fscrub .jnode,.fscrub .jconn,.fscrub .au-side,.fscrub .au-editor,
+.fscrub .mo-greet-w,.fscrub .mo-range,.fscrub .mo-card{
+  transition:translate .7s cubic-bezier(.2,.7,.2,1),
+    rotate .7s cubic-bezier(.2,.7,.2,1),
+    scale .7s cubic-bezier(.2,.7,.2,1),
+    opacity .55s ease}
+/* stagger: journey settles first, then the two work areas, arrows last */
+.fscrub .au-head{transition-delay:.05s}
+.fscrub .au-journey .jnode:nth-child(1){transition-delay:.1s}
+.fscrub .au-journey .jnode:nth-child(3){transition-delay:.22s}
+.fscrub .au-journey .jnode:nth-child(5){transition-delay:.34s}
+.fscrub .jconn{transition-delay:.5s}
+.fscrub .au-side{transition-delay:.3s}
+.fscrub .au-editor{transition-delay:.42s}
+/* greeting first, cards clockwise, range picker closes */
+.fscrub .mo-greet-w{transition-delay:.05s}
+.fscrub .mo-stats .mo-card:nth-child(1){transition-delay:.12s}
+.fscrub .mo-stats .mo-card:nth-child(2){transition-delay:.22s}
+.fscrub .mo-stats .mo-card:nth-child(3){transition-delay:.32s}
+.fscrub .mo-stats .mo-card:nth-child(4){transition-delay:.42s}
+.fscrub .mo-range{transition-delay:.5s}
+
+/* -- automations studio -- */
+.fscrub .au-head{opacity:var(--fp);
+  translate:0 calc((1 - var(--fp)) * -14px)}
+/* journey nodes drop in from above, each from its own height and lean */
+.fscrub .jnode{opacity:calc(.1 + .9 * var(--fp))}
+.fscrub .au-journey .jnode:nth-child(1){
+  translate:0 calc((1 - var(--fp)) * -46px);
+  rotate:calc((1 - var(--fp)) * var(--sx) * -4deg)}
+.fscrub .au-journey .jnode:nth-child(3){
+  translate:0 calc((1 - var(--fp)) * -80px);
+  rotate:calc((1 - var(--fp)) * var(--sx) * 3deg)}
+.fscrub .au-journey .jnode:nth-child(5){
+  translate:0 calc((1 - var(--fp)) * -115px);
+  rotate:calc((1 - var(--fp)) * var(--sx) * -5deg)}
+/* the connecting arrows only exist once the nodes are nearly home */
+.fscrub .jconn{opacity:calc((var(--fp) - .7) / .3)}
+/* WhatsApp preview rises from below with a slight lean */
+.fscrub .au-side{
+  translate:0 calc((1 - var(--fp)) * 70px);
+  rotate:calc((1 - var(--fp)) * var(--sx) * 4deg);
+  opacity:calc(.1 + .9 * var(--fp))}
+/* the editor slides in from its off-screen side */
+.fscrub .au-editor{
+  translate:calc((1 - var(--fp)) * var(--sx) * -110px) 0;
+  opacity:calc(.1 + .9 * var(--fp))}
+
+/* -- morning dashboard -- */
+.fscrub .mo-greet-w{opacity:var(--fp);
+  translate:0 calc((1 - var(--fp)) * -20px)}
+.fscrub .mo-range{opacity:calc((var(--fp) - .5) / .5);
+  translate:calc((1 - var(--fp)) * var(--sx) * -26px) 0}
+/* the four cards fly in from the four corners */
+.fscrub .mo-card{opacity:calc(.1 + .9 * var(--fp));
+  scale:calc(.94 + .06 * var(--fp))}
+.fscrub .mo-stats .mo-card:nth-child(1){
+  translate:calc((1 - var(--fp)) * var(--sx) * -70px) calc((1 - var(--fp)) * -55px);
+  rotate:calc((1 - var(--fp)) * var(--sx) * -4deg)}
+.fscrub .mo-stats .mo-card:nth-child(2){
+  translate:calc((1 - var(--fp)) * var(--sx) * 60px) calc((1 - var(--fp)) * -70px);
+  rotate:calc((1 - var(--fp)) * var(--sx) * 3deg)}
+.fscrub .mo-stats .mo-card:nth-child(3){
+  translate:calc((1 - var(--fp)) * var(--sx) * -60px) calc((1 - var(--fp)) * 70px);
+  rotate:calc((1 - var(--fp)) * var(--sx) * 3.5deg)}
+.fscrub .mo-stats .mo-card:nth-child(4){
+  translate:calc((1 - var(--fp)) * var(--sx) * 70px) calc((1 - var(--fp)) * 55px);
+  rotate:calc((1 - var(--fp)) * var(--sx) * -4.5deg)}
+
+/* ============ small screens: stack, frame in flow, no bleed ============ */
+@media (max-width:920px){
+  .fr-two{grid-template-columns:1fr}
+  .fr-two.flip .fr-crop{order:2}
+  .fr-crop.au,.fr-crop.mo{min-height:0}
+  .fr-frame{position:static;translate:none;width:100%}
+  .au-journey{width:100%}
+  .js{display:none}
+  .au-row{flex-direction:column}
+  .au-side{width:100%;max-width:340px;margin-inline:auto}
+  .au-editor{display:none}
+  .mo-head{flex-direction:column;align-items:flex-start;gap:10px}
+  .mo-range{order:2}
+  .mo-greet-w{order:1}
+  .mo-stats{grid-template-columns:1fr 1fr}
+}

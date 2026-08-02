@@ -76,8 +76,22 @@ not invented:
   design changes, update the replica from those two files.
 - **Voice calling** sits behind the `beta_voice_calls` flag in the app, so it is
   presented here as beta rather than generally available.
+- **The half-frame shots** (`components/blocks/Frames.tsx`, `styles/frames.css`)
+  replicate two more real pages under the same `.awin` token scope:
+  - the **abandoned-cart studio** — labels, journey strip (الحدث ← انتظار ←
+    الإرسال), field names and even the WhatsApp preview's message are verbatim
+    from `tenant/automations/partials/abandoned-cart-form.blade.php` +
+    `lang/{ar,en}/automations.php`; the sample values (أحمد، 240 ر.س، SAVE10)
+    are the product's own preview samples from `tenant_settings.php`. The
+    marketing bullets claim exactly the three automations that exist:
+    abandoned cart, order status, review request.
+  - the **tenant dashboard home** — greeting, range picker and the four
+    sparkline stat cards from `livewire/dashboard/stats.blade.php` +
+    `lang/{ar,en}/dashboard.php` (sparkline paths copied verbatim). The stat
+    numbers (1,284 / 8,952 / 342 / 4) are invented sample data, same license
+    as the cockpit's sample conversations.
 
-When the product changes, re-check these four before editing copy.
+When the product changes, re-check these before editing copy.
 
 ## Still outstanding
 

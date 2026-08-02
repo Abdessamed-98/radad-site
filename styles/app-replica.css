@@ -24,6 +24,9 @@
   color:var(--ink);
   background:var(--bg);
   direction:inherit;
+  /* the frame no longer clips (panels fly outside it during the scrub),
+     so the canvas rounds its own bottom corners */
+  border-radius:0 0 var(--r5) var(--r5);
 }
 .awin *{box-sizing:border-box}
 .awin .num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:plaintext}

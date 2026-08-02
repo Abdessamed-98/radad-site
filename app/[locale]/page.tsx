@@ -20,6 +20,7 @@ import { FeatZoom } from "@/components/blocks/FeatZoom";
 import { HubBlock } from "@/components/blocks/HubBlock";
 import { OrbBlock } from "@/components/blocks/OrbBlock";
 import { DotWave } from "@/components/hero/DotWave";
+import { AutomationBlock, MorningBlock } from "@/components/blocks/Frames";
 import { HandoffBlock, SourcesBlock, VoiceBlock } from "@/components/blocks/Product";
 import { MessageFlow } from "@/components/hero/MessageFlow";
 import { SplashIntro } from "@/components/SplashIntro";
@@ -120,7 +121,15 @@ export default async function HomePage({
         </div>
       </section>
 
+      {/* Half-frame shot of the real abandoned-cart studio; the editor
+          column intentionally runs off the viewport edge. */}
       <section className="sec sec-tint">
+        <div className="wrap">
+          <AutomationBlock locale={l} />
+        </div>
+      </section>
+
+      <section className="sec sec-white">
         <div className="wrap stack g8">
           <Head locale={l} badge="f_badge" title="src_h" sub="src_sub" />
           <SourcesBlock locale={l} />
@@ -193,6 +202,14 @@ export default async function HomePage({
             ))}
           </div>
           <Note>{t("t_note")}</Note>
+        </div>
+      </section>
+
+      {/* The merchant's morning: the tenant dashboard home as a half-frame,
+          bleeding off the opposite edge to the automations shot. */}
+      <section className="sec sec-dark">
+        <div className="wrap">
+          <MorningBlock locale={l} />
         </div>
       </section>
 

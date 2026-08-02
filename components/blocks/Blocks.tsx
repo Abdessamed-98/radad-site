@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Icon, Arrow } from "@/components/Icon";
 import { CHANS, FAQ, INTS, PLANS, STEPS } from "@/lib/content";
+import { BRANDS } from "@/lib/brands";
 import type { DictKey } from "@/lib/dictionary";
 import { getP, getT, href, type Locale } from "@/lib/i18n";
 import type { IconName } from "@/lib/icons";
@@ -40,28 +41,34 @@ export function Note({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ---------- channel logo strip ---------- */
-const STRIP: [IconName, string][] = [
-  ["wa", "WhatsApp"],
-  ["store", "Salla"],
-  ["store", "Zid"],
-  ["store", "Shopify"],
-  ["msgr", "Messenger"],
-  ["tg", "Telegram"],
-];
-
+/* ---------- integrations marquee ----------
+   Official brand marks (lib/brands.ts) drifting in an infinite loop. The
+   track is rendered twice and slides -50%, so the loop point is invisible.
+   Transform-only; edge fades are static overlays, NOT a mask — a mask over
+   an animating track would re-rasterise the strip every frame. */
 export function StripBlock({ locale }: { locale: Locale }) {
   const t = getT(locale);
+  const row = (key: string) => (
+    <div className="mq-track" key={key} aria-hidden={key === "b"}>
+      {[...BRANDS, ...BRANDS, ...BRANDS].map((br, i) => (
+        <span className="mq-item" key={br.name + i} style={{ "--bc": br.color } as React.CSSProperties}>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+               dangerouslySetInnerHTML={{ __html: br.svg }} />
+          {br.name}
+        </span>
+      ))}
+    </div>
+  );
   return (
-    <div className="strip rv">
-      <span className="strip-l">{t("strip_l")}</span>
-      <div className="strip-row">
-        {STRIP.map(([icon, label]) => (
-          <span className="lg" key={label}>
-            <Icon name={icon} width={1.8} />
-            {label}
-          </span>
-        ))}
+    <div className="mq rv">
+      <span className="mq-l">{t("strip_l")}</span>
+      <div className="mq-win">
+        <div className="mq-rail">
+          {row("a")}
+          {row("b")}
+        </div>
+        <span className="mq-fade s" aria-hidden="true" />
+        <span className="mq-fade e" aria-hidden="true" />
       </div>
     </div>
   );

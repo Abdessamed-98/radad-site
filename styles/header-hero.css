@@ -28,7 +28,7 @@
 .burger{display:none}
 
 /* ============ hero ============ */
-.hero{position:relative;background:var(--sky);overflow:hidden;
+.hero{position:relative;background:var(--sky);
   margin-top:calc(-1 * var(--nav-h));   /* cancels main padding-top */
   padding-block:calc(var(--nav-h) + clamp(.4rem,1.1vw,.9rem)) 0}
 .hero::after{content:"";position:absolute;inset-inline:0;bottom:0;height:200px;
@@ -78,45 +78,50 @@
 .fp4{bottom:12%;inset-inline-end:1%;animation-delay:4.2s}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 
-/* ============ assemble-on-scroll ============
-   AppWindow adds .asm-on once a quarter of the shot is really on screen
-   (its own observer — the generic .rv one fires at 5% and would burn the
-   moment before the scroll). Until then the parts sit apart — frame low,
-   chrome tucked up, panels pushed toward their own edges, pills shrunk —
-   then everything glides home back-to-front: frame, chrome, panels, and
-   the pills pop last. Independent translate/scale properties are used
-   throughout so the pills' bob keyframes (transform) compose on top. */
+/* ============ shatter-assembly scrub ============
+   --ap (0 scattered .. 1 assembled) is written by AppWindow from scroll.
+   The three cockpit panels start flung to the sides and middle, tilted,
+   OUTSIDE the frame — so .win must not clip: its rounding moves onto the
+   chrome bar (top) and the app canvas (bottom) instead of overflow:hidden.
+   All motion is transform via calc; scrubbing writes one variable.
+   Independent translate/rotate/scale properties keep the pills' bob
+   keyframes (transform) composing on top. */
+.shot{--ap:1;--sx:-1}
+:root[dir="rtl"] .shot{--sx:1}
 .shot.rv{opacity:1;transform:none}
 
-.shot .win{transition:translate .75s cubic-bezier(.22,1,.36,1),
-  scale .75s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease)}
-.shot .win-bar{transition:translate .6s cubic-bezier(.22,1,.36,1) .16s,
-  opacity .45s var(--ease) .16s}
-.shot .awin .cx-list{transition:translate .65s cubic-bezier(.22,1,.36,1) .3s,
-  opacity .45s var(--ease) .3s}
-.shot .awin .cx-thread{transition:translate .65s cubic-bezier(.22,1,.36,1) .44s,
-  opacity .45s var(--ease) .44s}
-.shot .awin .cx-ctx{transition:translate .65s cubic-bezier(.22,1,.36,1) .58s,
-  opacity .45s var(--ease) .58s}
-.shot .fpill{transition:scale .55s cubic-bezier(.34,1.56,.64,1), opacity .3s var(--ease)}
-.shot .fp1{transition-delay:.85s}
-.shot .fp2{transition-delay:.97s}
-.shot .fp3{transition-delay:1.09s}
-.shot .fp4{transition-delay:1.21s}
+/* Initial pose per the sketch: the side panels hang TALL at the far edges
+   of the viewport, only slightly raised, leaning ±8°; the middle panel is
+   LIFTED up into the content zone with a slight lean. The scattered panels
+   overlap the hero copy, so the whole mockup is pointer-transparent —
+   nothing in it is interactive anyway. */
+.shot .awin{pointer-events:none}
+.shot .awin .cx-list{
+  translate:calc((1 - var(--ap)) * var(--sx) * 20vw)
+            calc((1 - var(--ap)) * -24vh);
+  rotate:calc((1 - var(--ap)) * var(--sx) * 8deg)}
+.shot .awin .cx-ctx{
+  translate:calc((1 - var(--ap)) * var(--sx) * -20vw)
+            calc((1 - var(--ap)) * -20vh);
+  rotate:calc((1 - var(--ap)) * var(--sx) * -8deg)}
+.shot .awin .cx-thread{
+  translate:0 calc((1 - var(--ap)) * -14vh);
+  rotate:calc((1 - var(--ap)) * var(--sx) * -2.5deg);
+  scale:calc(.975 + .025 * var(--ap))}
 
-.shot:not(.asm-on) .win{translate:0 28px;scale:.96;opacity:0}
-.shot:not(.asm-on) .win-bar{translate:0 -12px;opacity:0}
-.shot:not(.asm-on) .awin .cx-list{translate:-36px 12px;opacity:0}
-.shot:not(.asm-on) .awin .cx-thread{translate:0 32px;opacity:0}
-.shot:not(.asm-on) .awin .cx-ctx{translate:36px 12px;opacity:0}
-:root[dir="rtl"] .shot:not(.asm-on) .awin .cx-list{translate:36px 12px}
-:root[dir="rtl"] .shot:not(.asm-on) .awin .cx-ctx{translate:-36px 12px}
-.shot:not(.asm-on) .fpill{scale:.55;opacity:0}
+/* frame + chrome stay put but soften while scattered */
+.shot .win{opacity:calc(.55 + .45 * var(--ap))}
+.shot .win-bar{opacity:var(--ap)}
 
-.win{background:var(--surf-1);border-radius:var(--r5);overflow:hidden;
+/* pills only exist once the window is whole */
+.shot .fpill{opacity:calc((var(--ap) - .82) / .18);
+  scale:calc(.7 + .3 * var(--ap))}
+
+.win{background:var(--surf-1);border-radius:var(--r5);
   box-shadow:var(--ring-2), var(--hi), var(--e4)}
 .win-bar{display:flex;align-items:center;gap:var(--s3);padding:.7rem 1rem;
-  background:var(--surf-2);box-shadow:0 1px 0 var(--line)}
+  background:var(--surf-2);box-shadow:0 1px 0 var(--line);
+  border-radius:var(--r5) var(--r5) 0 0}
 .dots{display:flex;gap:6px;flex:none}
 .dots i{width:9px;height:9px;border-radius:50%;background:var(--line-3)}
 .url{flex:1;max-width:250px;margin-inline:auto;background:var(--surf-1);border-radius:var(--r1);
@@ -197,16 +202,36 @@
 .meter i{display:block;height:100%;border-radius:var(--rf);background:var(--surf-btn);
   box-shadow:0 0 8px rgba(0,119,238,.5)}
 
-/* ============ strip ============ */
-.strip{display:flex;align-items:center;gap:clamp(1rem,4vw,2.4rem);flex-wrap:wrap;
-  justify-content:center;padding:var(--s6) clamp(1rem,3vw,2rem);background:var(--surf-2);
-  border-radius:var(--r4);box-shadow:var(--ring), var(--hi)}
-.strip-l{font-size:.81rem;color:var(--ink-3);max-width:16ch;line-height:1.55;flex:none;text-align:start}
-.strip-row{display:flex;flex-wrap:wrap;align-items:center;gap:clamp(.8rem,3vw,2rem);justify-content:center}
-.lg{display:flex;align-items:center;gap:var(--s2);color:var(--ink-3);font-weight:600;
-  font-size:.93rem;transition:all var(--dur) var(--ease)}
-.lg svg{width:19px;height:19px}
-.lg:hover{color:var(--ink);transform:translateY(-2px)}
+/* ============ integrations marquee ============
+   Duplicated track sliding -50% on a linear loop — transform only, so the
+   drift is pure compositor work. Edge fades are static gradient overlays
+   sitting on top; a mask here would re-rasterise the moving strip every
+   frame. Hover pauses. Direction is physical (marquees read fine either
+   way in RTL), and reduced motion stops the drift via the global cap. */
+.mq{display:flex;flex-direction:column;align-items:center;gap:var(--s4)}
+.mq-l{font-size:.8rem;color:var(--ink-3)}
+/* full-bleed via symmetric margins, not width:100vw — 100vw includes the
+   scrollbar, which shoved the band ~17px past one edge and ate that side's
+   fade. Symmetric margins split any overshoot evenly, so both edge fades
+   sit identically. */
+.mq-win{position:relative;overflow:hidden;
+  margin-inline:calc(50% - 50vw)}
+.mq-rail{display:flex;width:max-content;animation:mqDrift 44s linear infinite}
+.mq-track{display:flex;align-items:center;gap:clamp(2rem,5vw,3.6rem);
+  padding-inline-end:clamp(2rem,5vw,3.6rem)}
+.mq-item{display:flex;align-items:center;gap:var(--s2);flex:none;
+  font-weight:600;font-size:.93rem;color:var(--ink-2)}
+.mq-item svg{width:21px;height:21px;color:var(--bc)}
+@keyframes mqDrift{to{transform:translateX(-50%)}}
+:root[dir="rtl"] .mq-rail{animation-name:mqDriftR}
+@keyframes mqDriftR{to{transform:translateX(50%)}}
+.mq-fade{position:absolute;top:0;bottom:0;width:min(120px,14vw);pointer-events:none}
+.mq-fade.s{inset-inline-start:0;
+  background:linear-gradient(90deg,var(--bg),transparent)}
+.mq-fade.e{inset-inline-end:0;
+  background:linear-gradient(270deg,var(--bg),transparent)}
+:root[dir="rtl"] .mq-fade.s{background:linear-gradient(270deg,var(--bg),transparent)}
+:root[dir="rtl"] .mq-fade.e{background:linear-gradient(90deg,var(--bg),transparent)}
 
 /* ============ grids ============ */
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4)}
@@ -431,7 +456,5 @@
   .grid4{grid-template-columns:1fr 1fr}
   .grid3,.grid2,.slots,.faq,.form{grid-template-columns:1fr}
   .fpill{display:none}
-  .strip{flex-direction:column}
-  .strip-l{text-align:center;max-width:none}
-}
+  }
 

@@ -173,45 +173,42 @@ export function AppWindow({
 }) {
   const t = getT(locale);
 
-  /* Assemble-on-scroll. The generic .rv observer fires at 5% visibility,
-     which on tall viewports marks the shot before it is meaningfully on
-     screen (even under the splash) — so the assembly gets its own
-     observer that waits for a real quarter of the window to be visible. */
+  /* Shatter-assembly scrub. --ap runs 0..1 with scroll position: at 0 the
+     three panels sit scattered and tilted outside the frame; at 1 they are
+     home. Bidirectional by nature — scrolling back up scatters them again.
+     One rAF-throttled listener writing one custom property; every visual
+     derives from it in CSS as transform/opacity. Defaults to 1, so no-JS
+     and reduced motion simply see the assembled window. */
   const shotRef = useRef<HTMLDivElement>(null);
-  const [asm, setAsm] = useState(false);
   useEffect(() => {
     const el = shotRef.current;
-    if (
-      !el ||
-      !("IntersectionObserver" in window) ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      setAsm(true);
-      return;
-    }
-    /* 0.45: on tall viewports the shot already peeks ~30% above the fold
-       at load — the assembly should wait for a deliberate scroll. The
-       timer is a safety net so a visitor who never scrolls still gets
-       the window rather than an empty canvas. */
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          setAsm(true);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.45 }
-    );
-    io.observe(el);
-    const bail = setTimeout(() => setAsm(true), 5000);
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const vh = window.innerHeight;
+      const r = el.getBoundingClientRect();
+      /* assembled once the shot's top reaches ~38% of the viewport */
+      const p = Math.min(1, Math.max(0, (vh * 0.95 - r.top) / (vh * 0.57)));
+      el.style.setProperty("--ap", p.toFixed(4));
+    };
+    const queue = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", queue, { passive: true });
+    window.addEventListener("resize", queue, { passive: true });
     return () => {
-      io.disconnect();
-      clearTimeout(bail);
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", queue);
+      window.removeEventListener("resize", queue);
     };
   }, []);
 
   return (
-    <div className={`shot rv${asm ? " asm-on" : ""}`} ref={shotRef}>
+    <div className="shot rv" ref={shotRef}>
       {pills &&
         PILLS.map(([n, ic]) => (
           <span className={`fpill fp${n}`} key={n}>

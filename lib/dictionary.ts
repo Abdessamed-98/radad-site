@@ -327,6 +327,67 @@ dh_voice_a:["وصلني صوتك 👌 هذا عرض توضيحي — في الت
 f_h1a:["كل ما يحتاجه متجرك","Everything your store needs"],
 f_h1b:["للرد على عملائه","to answer customers"],
 ui_buy:["أرسلت لك رابط الشراء ✓","Sent you the checkout link ✓"],
+
+/* ---- automations section (marketing copy) ----
+   All three automations exist in the product: tenant/automations/partials/
+   {abandoned-cart,order-status,review-request}-form.blade.php */
+au_badge:["أتمتة المتجر","Store automation"],
+au_h:["السلة المتروكة ترجع بنفسها","Abandoned carts come back on their own"],
+au_sub:["حدّد كم ينتظر رداد، وكم مرة يذكّر، وبأي نص — وينزل التذكير على واتساب في الوقت الصح، ملتزمًا بساعات دوامك.","Choose how long Radad waits, how many reminders it sends, and what they say — the nudge lands on WhatsApp at the right moment, within your business hours."],
+au_1:["تذكير السلات المتروكة","Abandoned cart reminders"],
+au_1s:["رسالة تلقائية بقيمة السلة ورابط يكمل الطلب بضغطة","An automatic message with the cart total and a one-tap recovery link"],
+au_2:["تحديثات حالة الطلب","Order status updates"],
+au_2s:["العميل يوصله خبر التأكيد والشحن أولًا بأول","Customers hear about confirmation and shipping as it happens"],
+au_3:["طلب التقييم بعد التسليم","Review requests after delivery"],
+au_3s:["طلب تقييم لطيف بعد ما يوصل الطلب","A gentle review ask once the order arrives"],
+/* frame labels — verbatim from the product's lang/{ar,en}/automations.php
+   and tenant_settings.php (automations_group) */
+au_f_title:["تذكير السلات المتروكة","Abandoned Cart Reminders"],
+au_f_desc:["أرسل رسائل تلقائية للعملاء الذين تركوا منتجات في سلة التسوق","Send automatic messages to customers who left items in their cart"],
+au_j_event:["الحدث","Event"],
+au_j_wait:["انتظار","Wait"],
+au_j_send:["الإرسال","Send"],
+au_j_cart:["السلات المتروكة","Abandoned carts"],
+au_j_cart_s:["عميل ترك منتجات دون شراء","A customer left products without buying"],
+au_j_wait_v:["60 دقيقة","60 minutes"],
+au_j_wait_s:["قبل إرسال التذكير","Before sending the reminder"],
+au_f_delay:["التأخير الأولي (دقيقة)","Initial delay (minutes)"],
+au_f_rem:["عدد التذكيرات","Number of reminders"],
+au_f_rem_v:["2 تذكيرات إضافية","2 additional reminders"],
+au_f_int:["الفترة بين التذكيرات (ساعة)","Interval between reminders (hours)"],
+au_f_msg:["نص الرسالة","Message text"],
+au_f_bh:["ساعات العمل","Business hours"],
+au_f_save:["حفظ الإعدادات","Save settings"],
+au_wa_via:["عبر واتساب للأعمال","via WhatsApp Business"],
+au_wa_note:["كما ستصل لعميلك على واتساب","This is how it reaches your customer on WhatsApp"],
+au_wa_store:["نوفا","Nova"],
+/* the product's default_message with its own preview sample values
+   (أحمد، 240، حقيبة وحذاء، SAVE10) filled in */
+au_wa_msg:["مرحباً أحمد،\n\nلاحظنا أنك تركت 2 منتجات في سلتك!\n\nإجمالي السلة: 240 ر.س\nحقيبة، حذاء\n\nاستخدم كود الخصم: SAVE10\n\nأكمل طلبك الآن: nova.store/cart/x82","Hello Ahmed,\n\nWe noticed you left 2 items in your cart!\n\nCart total: 240 SAR\nBag, shoes\n\nUse discount code: SAVE10\n\nComplete your order now: nova.store/cart/x82"],
+
+/* ---- morning-dashboard section ---- */
+mo_badge:["لوحة التحكم","Your dashboard"],
+mo_h:["صباحك يبدأ هادئًا","Your morning starts calm"],
+mo_sub:["بينما أنت نايم، رداد يرد على محادثات الليل ويسجّل العملاء الجدد — تفتح اللوحة الصبح وتلقى الأرقام محدّثة والصندوق مرتب.","While you sleep, Radad answers the overnight conversations and logs new customers — open the dashboard in the morning to fresh numbers and a tidy inbox."],
+mo_1:["رد طوال الليل","Answers all night"],
+mo_1s:["ما فيه رسالة تنتظر بداية الدوام","No message waits for opening hours"],
+mo_2:["أرقامك أول ما تفتح","Your numbers the moment you open"],
+mo_2s:["المحادثات والرسائل والعملاء الجدد، بنظرة واحدة","Conversations, messages and new customers at a glance"],
+mo_3:["كل القنوات في لوحة واحدة","Every channel in one dashboard"],
+mo_3s:["واتساب وتيليجرام والبريد في نفس المكان","WhatsApp, Telegram and email in the same place"],
+/* frame labels — verbatim from the product's lang/{ar,en}/dashboard.php */
+mo_date:["الثلاثاء، 14 أكتوبر","Tuesday, 14 October"],
+mo_greet:["صباح الخير، عبدالله 👋","Good morning, Abdullah 👋"],
+mo_greet_s:["إليك ملخّص ما يحدث في نوفا اليوم.","Here's a summary of what's happening at Nova today."],
+mo_r_all:["منذ البداية","All time"],
+mo_r_today:["اليوم","Today"],
+mo_r_7:["7 أيام","7 days"],
+mo_r_30:["30 يوم","30 days"],
+mo_s_conv:["المحادثات","Conversations"],
+mo_s_msg:["الرسائل","Messages"],
+mo_s_cust:["العملاء","Customers"],
+mo_s_ag:["الوكلاء","Agents"],
+mo_ai_pill:["2 ذكاء","2 AI"],
 } as const;
 
 export type DictKey = keyof typeof dict;
