@@ -302,10 +302,12 @@
   transform:translateY(calc((1 - var(--cp)) * 12vh))
             scale(calc(.94 + .06 * var(--cp)))}
 
-/* phones only: no pin, settled static section */
+/* phones only: no pin, settled static section. The section's own top
+   padding is 0 (.sec-t) — desktop breathing room comes from the pinned
+   stage's nav offset, so the static fallback restores it here. */
 @media (max-width:700px){
   .fz{height:auto}
-  .fz-stick{position:static;min-height:0;padding-top:0}
+  .fz-stick{position:static;min-height:0;padding-top:var(--s16)}
   .fz-head,.fz-cards{transform:none;opacity:1}
   .fz-head span{white-space:normal}
 }
