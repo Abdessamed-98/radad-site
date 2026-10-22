@@ -1,0 +1,71 @@
+/* ============ activities carousel ============
+   Heading row (copy at the start, arrows at the end) over a scroll-snap rail
+   whose first card lines up with .wrap content and whose tail runs off the
+   viewport edge. */
+#activities{scroll-margin-top:var(--s4)}
+
+.act{display:flex;flex-direction:column;gap:var(--s8)}
+.act-head{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--s6)}
+.act-head .t-lead{max-width:56ch}
+.act-head .badge{align-self:flex-start}
+
+.act-nav{display:flex;gap:var(--s2);flex:none}
+.act-btn{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
+  color:var(--ink);background:var(--surf-1);box-shadow:var(--ring-2), var(--hi), var(--e1);
+  transition:transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), opacity var(--dur) var(--ease)}
+.act-btn .ar{width:17px;height:17px}
+.act-btn:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 0 0 1px var(--line-3), var(--hi), var(--e2)}
+.act-btn:disabled{opacity:.35;cursor:default}
+/* Arrow already flips for RTL; "previous" points the other way again */
+:root[dir="ltr"] .act-btn.prev .ar{transform:scaleX(-1)}
+:root[dir="rtl"] .act-btn.prev .ar{transform:none}
+
+.act-rail{
+  --edge:max(var(--gut), calc((100% - var(--maxw)) / 2 + var(--gut)));
+  display:flex;gap:var(--s5);overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;scroll-padding-inline:var(--edge);
+  padding:var(--s2) var(--edge) var(--s6);scrollbar-width:none}
+.act-rail::-webkit-scrollbar{display:none}
+
+.act-card{position:relative;flex:0 0 clamp(250px,26vw,340px);aspect-ratio:3/4;
+  border-radius:var(--r4);overflow:hidden;isolation:isolate;scroll-snap-align:start;color:#fff;
+  background:var(--act-bg);box-shadow:var(--ring), var(--e2);
+  transition:transform var(--dur-l) var(--ease), box-shadow var(--dur-l) var(--ease)}
+.act-card:hover{transform:translateY(-4px);box-shadow:var(--ring-2), var(--e3)}
+
+/* placeholder art: brand-family gradient with an oversized line icon */
+.act-ph{position:absolute;inset:0;display:grid;place-items:center;z-index:-2;color:rgba(255,255,255,.16)}
+.act-ph svg{width:62%;height:auto;transform:translateY(-12%)}
+.act-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;
+  opacity:0;transition:opacity .5s var(--ease), transform .8s var(--ease)}
+.act-img.on{opacity:1}
+.act-card:hover .act-img{transform:scale(1.045)}
+/* legibility scrim, heaviest where the copy sits */
+.act-card::after{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(0deg,rgba(3,18,42,.88) 0%,rgba(3,18,42,.55) 34%,rgba(3,18,42,0) 62%)}
+
+.act-store{--act-bg:linear-gradient(160deg,#2E93FF 0%,#0057C8 55%,#052659 100%)}
+.act-clinic{--act-bg:linear-gradient(160deg,#2EC4C4 0%,#0B7C99 55%,#053F59 100%)}
+.act-restaurant{--act-bg:linear-gradient(160deg,#F2A04A 0%,#C25A1E 55%,#4A1A0B 100%)}
+.act-realestate{--act-bg:linear-gradient(160deg,#7C8BFF 0%,#3F4FD0 55%,#151A5C 100%)}
+.act-general{--act-bg:linear-gradient(160deg,#34C6F5 0%,#0077EE 55%,#063C8C 100%)}
+
+.act-body{position:absolute;inset-inline:0;bottom:0;padding:var(--s6) var(--s5) var(--s5);
+  display:flex;flex-direction:column;gap:var(--s2)}
+.act-n{margin:0;font-family:var(--disp);font-size:1.22rem;font-weight:700;line-height:1.3}
+.act-d{margin:0;font-size:.86rem;line-height:1.7;color:rgba(255,255,255,.84)}
+.act-go{display:inline-flex;align-items:center;gap:var(--s2);align-self:flex-start;
+  margin-top:var(--s3);font-weight:600;font-size:.88rem;color:#fff}
+.act-go::before{content:"";position:absolute;inset:0}  /* whole card is the target */
+:root[dir="rtl"] .act-go:hover .ar{transform:scaleX(-1) translateX(3px)}
+:root[dir="ltr"] .act-go:hover .ar{transform:translateX(3px)}
+
+@media (max-width:760px){
+  .act{gap:var(--s6)}
+  .act-head{flex-direction:column;align-items:stretch}
+  .act-nav{display:none}          /* swiping is the gesture on phones */
+  .act-card{flex-basis:76vw;max-width:320px}
+}
+
+/* the hero's "choose your business" anchor glides instead of jumping */
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}

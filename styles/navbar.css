@@ -147,3 +147,6 @@ body.rd-splash-hold .hdr-in>*{opacity:0;transition:none}
 @media (prefers-reduced-motion:reduce){
   .hdr{transition:none}
 }
+
+/* secondary header actions drop off before the burger takes over */
+@media (max-width:860px){.hdr-hide-sm{display:none}}

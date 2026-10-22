@@ -10,8 +10,8 @@ export function generateStaticParams() {
 }
 
 const CONTACTS: [IconName, DictKey, string][] = [
-  ["mail", "c_sales", "sales@radad.online"],
-  ["chat", "c_support", "support@radad.online"],
+  ["mail", "c_sales", "sales@atheerxai.com"],
+  ["chat", "c_support", "support@atheerxai.com"],
 ];
 
 export default async function ContactPage({

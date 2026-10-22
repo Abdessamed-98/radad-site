@@ -5,7 +5,7 @@ import type { IconName } from "./icons";
 
 export type Lane = {
   q: readonly [string, string];   // customer question
-  a: readonly [string, string];   // Radad's reply
+  a: readonly [string, string];   // Atheer's reply
   syn: number; eyn: number; side: number; d: number;
   ch: IconName; cc: string; far?: number;
   /** Seconds shown on a voice-note question. When set, the inbound chip
@@ -13,7 +13,7 @@ export type Lane = {
       text; q still documents what the customer said. */
   voice?: number;
   /** Seconds for a voice-note reply — the outbound brand chip gets the
-      same treatment. a still documents what Radad answered. */
+      same treatment. a still documents what Atheer answered. */
   va?: number;
 };
 

@@ -347,7 +347,8 @@
 .sc-chip.wa{background:rgba(37,211,102,.15);color:#1faa55}
 /* Salla's own app-icon treatment: dark mark on its official mint */
 .sc-chip.salla{background:#BAF3E6;color:#0b3d36}
-.sc-chip.zid{background:rgba(107,78,255,.14);color:#6B4EFF}
+/* Zid's own app icon: dark mark on its purple, as zid.sa serves it */
+.sc-chip.zid{background:#AE72FF;color:#1F0433}
 .sc1-chips{display:flex;gap:6px}
 .stp.in .sc-chip{opacity:1;scale:1}
 .stp.in .sc1-chips .sc-chip:nth-child(1){transition-delay:calc(var(--sd) + .35s)}
@@ -444,6 +445,18 @@
 .pl-on .tick{background:rgba(255,255,255,.22)}
 .pl-on .tick svg{color:#fff}
 .pl .btn{margin-top:auto;width:100%}
+/* org / agent / credit limits — a quiet spec list above the features */
+.pl-lim{margin:0;padding:var(--s3) 0;display:flex;flex-direction:column;gap:var(--s2);
+  border-block:1px solid var(--line);font-size:.83rem}
+.pl-lim div{display:flex;justify-content:space-between;gap:var(--s3)}
+.pl-lim dt{color:var(--ink-2)}
+.pl-lim dd{margin:0;font-weight:700;font-family:var(--disp)}
+.pl-on .pl-lim{border-color:rgba(255,255,255,.2)}
+.pl-on .pl-lim dt{color:rgba(255,255,255,.8)}
+.pl-foot{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--s2) var(--s5);
+  font-size:.85rem;color:var(--ink-2);text-align:center}
+.pl-foot a{color:var(--brand-d);font-weight:600}
+.pl-foot a:hover{text-decoration:underline}
 
 /* ============ faq ============ */
 .faq{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);align-items:start}

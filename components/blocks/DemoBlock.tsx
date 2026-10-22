@@ -15,10 +15,10 @@ import { getP, getT, type Locale } from "@/lib/i18n";
  *          already answered. The mic sends a mock voice note instead.
  *   qr   — the WhatsApp button flips the panel to a scannable QR code.
  *          The code is REAL (qrcode-generator) but deliberately encodes
- *          radad.online and says so — no fake wa.me number.
+ *          atheerxai.com and says so — no fake wa.me number.
  */
 
-const QR_TARGET = "https://radad.online";
+const QR_TARGET = "https://atheerxai.com";
 
 function QrSvg() {
   /* deterministic — same modules server- and client-side, no hydration risk */

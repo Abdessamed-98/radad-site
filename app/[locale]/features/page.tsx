@@ -6,7 +6,6 @@ import {
   Note,
 } from "@/components/blocks/Blocks";
 import { AppWindow } from "@/components/blocks/AppWindow";
-import { DemoBlock } from "@/components/blocks/DemoBlock";
 import { FeatCards } from "@/components/blocks/MiniUI";
 import { HubBlock } from "@/components/blocks/HubBlock";
 import { OrbBlock } from "@/components/blocks/OrbBlock";
@@ -38,13 +37,6 @@ export default async function FeaturesPage({
       <section className="sec sec-white">
         <div className="wrap stack g8">
           <OrbBlock locale={l} />
-        </div>
-      </section>
-
-      <section className="sec sec-tint">
-        <div className="wrap stack g8">
-          <Head locale={l} badge="dm_badge" title="dm_h" sub="dm_sub" />
-          <DemoBlock locale={l} />
         </div>
       </section>
 

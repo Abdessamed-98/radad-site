@@ -17,13 +17,13 @@ import { Logo3D } from "@/components/Logo3D";
 /* ------------------------------------------------------------------ */
 
 const S = {
-  open: ["افتح المحادثة مع مساعد رداد", "Chat with the Radad assistant"],
+  open: ["افتح المحادثة مع مساعد أثير", "Chat with the Atheer assistant"],
   close: ["إغلاق المحادثة", "Close chat"],
-  title: ["مساعد رداد", "Radad Assistant"],
+  title: ["مساعد أثير", "Atheer Assistant"],
   online: ["متصل الآن", "Online now"],
   greeting: [
-    "مرحباً! 👋 أنا مساعد رداد. كيف يمكنني مساعدتك اليوم؟",
-    "Hi there! 👋 I'm the Radad assistant. How can I help you today?",
+    "مرحباً! 👋 أنا مساعد أثير. كيف يمكنني مساعدتك اليوم؟",
+    "Hi there! 👋 I'm the Atheer assistant. How can I help you today?",
   ],
   placeholder: ["اكتب رسالتك…", "Type your message…"],
   send: ["إرسال", "Send"],
@@ -35,8 +35,8 @@ const REPLIES = [
     "Thanks for your message! Our team will get back to you soon — you can also reach us from the contact page.",
   ],
   [
-    "يمكنك استكشاف كل ما تقدمه رداد من صفحة المزايا، أو الاطلاع على خطط الأسعار.",
-    "You can explore everything Radad offers on the features page, or take a look at our pricing plans.",
+    "يمكنك استكشاف كل ما يقدّمه أثير من صفحة المزايا، أو الاطلاع على خطط الأسعار.",
+    "You can explore everything Atheer offers on the features page, or take a look at our pricing plans.",
   ],
   [
     "سؤال جيد! تواصل معنا عبر صفحة التواصل وسنرد عليك بأسرع وقت ممكن.",

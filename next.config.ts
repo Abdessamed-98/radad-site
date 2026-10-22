@@ -8,6 +8,8 @@ const ghPages = process.env.GH_PAGES === "1";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Plain <img> tags under public/ need the prefix spelled out.
+  env: { NEXT_PUBLIC_BASE_PATH: ghPages ? "/radad-site" : "" },
   ...(ghPages
     ? {
         output: "export" as const,

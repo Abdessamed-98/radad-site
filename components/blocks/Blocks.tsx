@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Icon, Arrow } from "@/components/Icon";
-import { CHANS, FAQ, INTS, PLANS, STEPS } from "@/lib/content";
+import { CHANS, FAQ, INTS, PLANS, STEPS, type Faq } from "@/lib/content";
 import { BRANDS } from "@/lib/brands";
+import { LINKS } from "@/lib/links";
 import type { DictKey } from "@/lib/dictionary";
 import { getP, getT, href, type Locale } from "@/lib/i18n";
 import type { IconName } from "@/lib/icons";
@@ -41,20 +42,25 @@ export function Note({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ---------- integrations marquee ----------
-   Official brand marks (lib/brands.ts) drifting in an infinite loop. The
+/* ---------- integrations marquee ---------- */
+const STRIP = [
+  "WhatsApp", "Salla", "Zid", "Shopify", "WordPress", "Google Sheets", "Email", "Systems",
+].map((n) => BRANDS.find((b) => b.name === n)!);
+
+/* Official brand marks (lib/brands.ts) drifting in an infinite loop. The
    track is rendered twice and slides -50%, so the loop point is invisible.
    Transform-only; edge fades are static overlays, NOT a mask — a mask over
    an animating track would re-rasterise the strip every frame. */
 export function StripBlock({ locale }: { locale: Locale }) {
   const t = getT(locale);
+  const p = getP(locale);
   const row = (key: string) => (
     <div className="mq-track" key={key} aria-hidden={key === "b"}>
-      {[...BRANDS, ...BRANDS, ...BRANDS].map((br, i) => (
+      {[...STRIP, ...STRIP, ...STRIP].map((br, i) => (
         <span className="mq-item" key={br.name + i} style={{ "--bc": br.color } as React.CSSProperties}>
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
                dangerouslySetInnerHTML={{ __html: br.svg }} />
-          {br.name}
+          {br.label ? p(br.label) : br.name}
         </span>
       ))}
     </div>
@@ -205,33 +211,36 @@ export function StepsBlock({ locale }: { locale: Locale }) {
 }
 
 /* ---------- pricing ---------- */
+const LIMITS: DictKey[] = ["p_orgs", "p_agents", "p_credits"];
+
 export function PlansBlock({ locale }: { locale: Locale }) {
   const t = getT(locale);
   const p = getP(locale);
   return (
-    <div className="grid4">
+    <div className="grid3">
       {PLANS.map((pl, i) => (
         <div
           className={`surface lift pl${pl.hot ? " pl-on" : ""} rv d${(i % 3) + 1}`}
           key={i}
         >
-          {pl.hot ? (
-            <span className="badge badge-glass pl-flag">{t("p_pop")}</span>
+          {pl.trial ? (
+            <span className="badge badge-glass pl-flag">{t("p_trial")}</span>
           ) : null}
           <span className="pl-n">{p(pl.n)}</span>
-          {pl.free ? (
-            <div className="pl-pr">
-              <span className="pl-a">{t("p_free")}</span>
-            </div>
-          ) : (
-            <div className="pl-pr">
-              {/* PlanSeeder prices are SAR, not dollars */}
-              <span className="pl-c">{p(["ر.س", "SAR"])}</span>
-              <span className="pl-a num">{p(pl.a)}</span>
-              <span className="pl-per">{t("p_month")}</span>
-            </div>
-          )}
+          <div className="pl-pr">
+            <span className="pl-c">SAR</span>
+            <span className="pl-a num">{pl.a}</span>
+            <span className="pl-per">{t("p_month")}</span>
+          </div>
           <p className="pl-for">{p(pl.f2)}</p>
+          <dl className="pl-lim">
+            {LIMITS.map((k, n) => (
+              <div key={k}>
+                <dt>{t(k)}</dt>
+                <dd className="num">{pl.lim[n] ?? t("p_unl")}</dd>
+              </div>
+            ))}
+          </dl>
           <ul>
             {pl.f.map((f, k) => (
               <li key={k}>
@@ -242,33 +251,62 @@ export function PlansBlock({ locale }: { locale: Locale }) {
               </li>
             ))}
           </ul>
-          <Link
-            className={`btn ${pl.hot ? "btn-w" : "btn-s"}`}
-            href={href(locale, "contact")}
-          >
-            {t(pl.cta)}
-          </Link>
+          <a className={`btn ${pl.hot ? "btn-w" : "btn-s"}`} href={LINKS.salla}>
+            {t("p_via_salla")}
+          </a>
         </div>
       ))}
     </div>
   );
 }
 
+/* Billing goes through the Salla app store; everyone else talks to sales. */
+export function PlansFoot({ locale }: { locale: Locale }) {
+  const t = getT(locale);
+  return (
+    <div className="pl-foot rv">
+      <span>{t("p_salla")}</span>
+      <Link href={href(locale, "contact")}>{t("p_not_salla")}</Link>
+      <span>{t("p_pay")}</span>
+    </div>
+  );
+}
+
 /* ---------- FAQ ---------- */
-export function FaqBlock({ locale }: { locale: Locale }) {
+export function FaqBlock({
+  locale,
+  items = FAQ,
+  more,
+}: {
+  locale: Locale;
+  items?: readonly Faq[];
+  /** link to the full /faq page under the list */
+  more?: boolean;
+}) {
+  const t = getT(locale);
   const p = getP(locale);
   return (
-    <div className="faq">
-      {FAQ.map((f, i) => (
-        <details className="surface qa rv" key={i}>
-          <summary>
-            {p(f.q)}
-            <span className="qa-i">+</span>
-          </summary>
-          <div className="qa-a">{p(f.a)}</div>
-        </details>
-      ))}
-    </div>
+    <>
+      <div className="faq">
+        {items.map((f, i) => (
+          <details className="surface qa rv" key={i}>
+            <summary>
+              {p(f.q)}
+              <span className="qa-i">+</span>
+            </summary>
+            <div className="qa-a">{p(f.a)}</div>
+          </details>
+        ))}
+      </div>
+      {more && (
+        <div className="ctr stack rv">
+          <Link className="btn btn-s" href={href(locale, "faq")}>
+            {t("faq_all")}
+            <Arrow />
+          </Link>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -350,13 +388,6 @@ export function TrustBlock({ locale }: { locale: Locale }) {
           </span>
         </div>
       ))}
-      {/* left empty on purpose — awaiting a real certification to name */}
-      <div className="tr slot rv">
-        <span className="ico ico-md ico-neutral">
-          <Icon name="check" width={2} />
-        </span>
-        <span className="tr-k">{t("tru_slot")}</span>
-      </div>
     </div>
   );
 }
@@ -457,10 +488,10 @@ export function Band({ locale }: { locale: Locale }) {
           <h2 className="t-h2">{t("band_h")}</h2>
           <p>{t("band_s")}</p>
           <div className="cta-row">
-            <Link className="btn btn-lg btn-w" href={href(locale, "contact")}>
+            <a className="btn btn-lg btn-w" href={LINKS.register}>
               {t("cta_start")}
               <Arrow />
-            </Link>
+            </a>
             <Link className="btn btn-lg btn-o" href={href(locale, "pricing")}>
               {t("nav_price")}
             </Link>

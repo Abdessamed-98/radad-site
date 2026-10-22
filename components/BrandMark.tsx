@@ -1,20 +1,10 @@
 import { LOGO } from "@/lib/logo";
-import type { Locale } from "@/lib/i18n";
+import { getT, type Locale } from "@/lib/i18n";
 
-/** Arabic gets the full horizontal lockup; English pairs the mark with a
- *  latin wordmark, since the lockup's wordmark is Arabic script. */
+/** The mark plus a typeset wordmark in both locales. The horizontal lockup
+ *  in Logo/ still carries the old Radad wordmark as paths, so it's retired
+ *  until an Atheer lockup lands. */
 export function BrandMark({ locale }: { locale: Locale }) {
-  if (locale === "ar") {
-    return (
-      <svg
-        className="logo-lock"
-        viewBox="0 0 108 40"
-        fill="none"
-        aria-hidden="true"
-        dangerouslySetInnerHTML={{ __html: LOGO.h }}
-      />
-    );
-  }
   return (
     <>
       <svg
@@ -24,7 +14,7 @@ export function BrandMark({ locale }: { locale: Locale }) {
         aria-hidden="true"
         dangerouslySetInnerHTML={{ __html: LOGO.sym }}
       />
-      <span className="brand-t">Radad</span>
+      <span className="brand-t">{getT(locale)("brand")}</span>
     </>
   );
 }

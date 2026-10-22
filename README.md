@@ -1,6 +1,6 @@
-# Radad — marketing site
+# Atheer AI — marketing site
 
-Arabic-first (RTL) Next.js App Router site for radad.online, ported from the
+Arabic-first (RTL) Next.js App Router site for atheerxai.com (formerly Radad), ported from the
 single-file prototype.
 
 ```bash

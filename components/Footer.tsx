@@ -2,11 +2,13 @@ import Link from "next/link";
 import { BrandMark } from "./BrandMark";
 import { Icon } from "./Icon";
 import { getT, href, type Locale } from "@/lib/i18n";
+import { LINKS } from "@/lib/links";
 
 export function Footer({ locale }: { locale: Locale }) {
   const t = getT(locale);
   const to = (path: string) => href(locale, path);
 
+  /* Same three columns as atheerxai.com; legal pages live on the app. */
   const columns: { head: string; items: [string, string][] }[] = [
     {
       head: t("ft_prod"),
@@ -14,26 +16,19 @@ export function Footer({ locale }: { locale: Locale }) {
         [t("nav_feat"), to("features")],
         [t("nav_price"), to("pricing")],
         [t("nav_int"), to("integrations")],
-        [t("ft_docs"), to("")],
-        [t("ft_api"), to("integrations")],
+        [t("ft_faq"), to("faq")],
       ],
     },
     {
       head: t("ft_comp"),
-      items: [
-        [t("ft_about"), to("contact")],
-        [t("nav_contact"), to("contact")],
-        [t("ds_badge"), to("system")],
-        [t("ft_blog"), to("")],
-        [t("ft_status"), to("")],
-      ],
+      items: [[t("nav_contact"), to("contact")]],
     },
     {
       head: t("ft_legal"),
       items: [
-        [t("ft_privacy"), to("")],
-        [t("ft_terms"), to("")],
-        [t("ft_dpa"), to("")],
+        [t("ft_privacy"), LINKS.privacy],
+        [t("ft_terms"), LINKS.terms],
+        [t("ft_refund"), LINKS.refund],
       ],
     },
   ];

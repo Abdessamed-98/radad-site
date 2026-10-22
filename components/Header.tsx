@@ -11,6 +11,7 @@ import {
   switchLocalePath,
   type Locale,
 } from "@/lib/i18n";
+import { LINKS } from "@/lib/links";
 
 export function Header({ locale }: { locale: Locale }) {
   const t = getT(locale);
@@ -99,7 +100,7 @@ export function Header({ locale }: { locale: Locale }) {
     >
       <div className="wrap">
         <div className="hdr-in">
-          <Link className="brand" href={home} aria-label="Radad">
+          <Link className="brand" href={home} aria-label={t("brand")}>
             <BrandMark locale={locale} />
           </Link>
 
@@ -147,6 +148,9 @@ export function Header({ locale }: { locale: Locale }) {
                 />
               </svg>
             </button>
+            <a className="lang hdr-hide-sm" href={LINKS.login}>
+              {t("nav_login")}
+            </a>
             <Link className="btn btn-d btn-sm" id="navCta" href={href(locale, "contact")}>
               {t("nav_cta")}
             </Link>

@@ -6,7 +6,7 @@ import { Note } from "./Blocks";
 import type { DictKey } from "@/lib/dictionary";
 import { getT, type Locale } from "@/lib/i18n";
 
-const PLATFORMS = ["Salla", "Zid", "Shopify", "WooCommerce", "—"];
+const PLATFORMS = ["Salla", "Zid", "Shopify", "WooCommerce"];
 
 export function ContactForm({ locale }: { locale: Locale }) {
   const t = getT(locale);
@@ -53,6 +53,7 @@ export function ContactForm({ locale }: { locale: Locale }) {
           {PLATFORMS.map((x) => (
             <option key={x}>{x}</option>
           ))}
+          <option value="none">{t("c_plat_na")}</option>
         </select>
       </div>
 
@@ -73,7 +74,7 @@ export function ContactForm({ locale }: { locale: Locale }) {
       </div>
 
       <div className="field full">
-        <Note>{t("c_demo")}</Note>
+        <Note>{t("c_priv")}</Note>
       </div>
     </form>
   );

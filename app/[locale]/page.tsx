@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   Band,
   CmpBlock,
@@ -6,6 +5,7 @@ import {
   Head,
   Note,
   PlansBlock,
+  PlansFoot,
   StatsBlock,
   StepsBlock,
   StripBlock,
@@ -14,7 +14,7 @@ import {
 import { AppWindow } from "@/components/blocks/AppWindow";
 import { StatsZoom } from "@/components/blocks/StatsZoom";
 import { CalcBlock } from "@/components/blocks/CalcBlock";
-import { DemoBlock } from "@/components/blocks/DemoBlock";
+import { ActivitiesBlock } from "@/components/blocks/Activities";
 import { FeatCards } from "@/components/blocks/MiniUI";
 import { FeatZoom } from "@/components/blocks/FeatZoom";
 import { HubBlock } from "@/components/blocks/HubBlock";
@@ -25,7 +25,9 @@ import { HandoffBlock, SourcesBlock, VoiceBlock } from "@/components/blocks/Prod
 import { MessageFlow } from "@/components/hero/MessageFlow";
 import { SplashIntro } from "@/components/SplashIntro";
 import { Arrow, Icon } from "@/components/Icon";
-import { getT, href, isLocale, locales, type Locale } from "@/lib/i18n";
+import { FAQ } from "@/lib/content";
+import { getT, isLocale, locales, type Locale } from "@/lib/i18n";
+import { LINKS } from "@/lib/links";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -57,14 +59,14 @@ export default async function HomePage({
             </h1>
             <p className="t-lead rv d2">{t("hero_sub")}</p>
             <div className="cta-row rv d2">
-              <Link className="btn btn-lg btn-p" href={href(l, "contact")}>
-                <Icon name="store" width={2} />
-                {t("cta_install")}
+              <a className="btn btn-lg btn-p" href="#activities">
+                <Icon name="grid" width={2} />
+                {t("cta_pick")}
                 <Arrow />
-              </Link>
-              <Link className="btn btn-lg btn-s" href={href(l, "contact")}>
+              </a>
+              <a className="btn btn-lg btn-s" href={LINKS.register}>
                 {t("cta_start")}
-              </Link>
+              </a>
             </div>
             <span className="t-cap rv d3">{t("hero_note")}</span>
           </div>
@@ -76,6 +78,11 @@ export default async function HomePage({
         <div className="wrap">
           <StripBlock locale={l} />
         </div>
+      </section>
+
+      {/* The hero CTA lands here: who it's for, before what it does. */}
+      <section className="sec sec-white" id="activities">
+        <ActivitiesBlock locale={l} />
       </section>
 
       {/* no badge here by design — the headline itself opens the act */}
@@ -96,13 +103,6 @@ export default async function HomePage({
       <section className="sec sec-white">
         <div className="wrap stack g8">
           <OrbBlock locale={l} />
-        </div>
-      </section>
-
-      <section className="sec sec-tint">
-        <div className="wrap stack g8">
-          <Head locale={l} badge="dm_badge" title="dm_h" sub="dm_sub" />
-          <DemoBlock locale={l} />
         </div>
       </section>
 
@@ -168,7 +168,6 @@ export default async function HomePage({
         <div className="wrap stack g8">
           <Head locale={l} badge="tru_badge" title="tru_h" />
           <TrustBlock locale={l} />
-          <Note>{t("tru_slots")}</Note>
         </div>
       </section>
 
@@ -217,14 +216,14 @@ export default async function HomePage({
         <div className="wrap stack g8">
           <Head locale={l} badge="p_badge" title="p_h" sub="p_sub" />
           <PlansBlock locale={l} />
-          <Note>{t("p_pay")}</Note>
+          <PlansFoot locale={l} />
         </div>
       </section>
 
       <section className="sec sec-tint">
         <div className="wrap stack g8">
           <Head locale={l} badge="faq_badge" title="faq_h" />
-          <FaqBlock locale={l} />
+          <FaqBlock locale={l} items={FAQ.slice(0, 6)} more />
         </div>
       </section>
 
